@@ -1,18 +1,18 @@
 {
-  "name": "eds-lib",
+  "name": "prozorro-eds",
   "private": true,
   "version": "0.0.1",
   "description": "Wrapper over IIT libraries",
   "author": "Dmytro Rybachek",
   "license": "MIT",
-  "main": "./dist/sign-to-doc-lib.cjs.js",
-  "module": "./dist/sign-to-doc-lib.es.js",
+  "main": "./dist/prozorro-eds.cjs.js",
+  "module": "./dist/prozorro-eds.es.js",
   "types": "./dist/index.d.ts",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/sign-to-doc-lib.es.js",
-      "require": "./dist/sign-to-doc-lib.cjs.js",
+      "import": "./dist/prozorro-eds.es.js",
+      "require": "./dist/prozorro-eds.cjs.js",
       "types": "./dist/index.d.ts"
     },
     "./dist/": {
