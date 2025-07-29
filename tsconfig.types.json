@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "isolatedModules": false,
+    "noEmit": false,
+    "allowJs": false,
+    "emitDeclarationOnly": true,
+    "baseUrl": ".",
+    "outFile": "./build/dist/eds-lib.d.ts",
+    "declarationMap": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "files": [
+    "./src/services/Eds.ts"
+  ],
+}
