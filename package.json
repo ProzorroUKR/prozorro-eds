@@ -1,7 +1,7 @@
 {
   "name": "prozorro-eds",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wrapper over IIT libraries",
   "author": "Dmytro Rybachek",
   "license": "MIT",
