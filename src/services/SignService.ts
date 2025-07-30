@@ -1,13 +1,13 @@
-import { errorMessages } from "~/config/errorMessages.ts";
-import { ENCODING } from "~/constants/encoding";
-import { EdsError } from "~/services/Error/EdsError";
-import type { SignType } from "~/types/sign/SignType";
-import type { UserSignOptionsType } from "~/types/UserSignOptionsType";
-import { Assert } from "~/utils/Assert";
-import type { IBase64 } from "~/utils/Base64";
-import type { IWidgetEndUser } from "~/store/modules/WidgetEndUser.ts";
-import type { IApiSignAdapter } from "~/services/ApiSign/ApiSignAdapter.ts";
-import type { IApiSignService } from "~/services/ApiSign/ApiSignService.ts";
+import { errorMessages } from "@/config/errorMessages";
+import { ENCODING } from "@/constants/encoding";
+import { EdsError } from "@/services/Error/EdsError";
+import type { SignType } from "@/types/sign/SignType";
+import type { UserSignOptionsType } from "@/types/UserSignOptionsType";
+import { Assert } from "@/utils/Assert";
+import type { IBase64 } from "@/utils/Base64";
+import type { IWidgetEndUser } from "@/store/modules/WidgetEndUser";
+import type { IApiSignAdapter } from "@/services/ApiSign/ApiSignAdapter";
+import type { IApiSignService } from "@/services/ApiSign/ApiSignService";
 
 export interface ISignService {
   sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
@@ -29,9 +29,9 @@ export class SignService implements ISignService {
       const options = {
         external: Boolean(userOptions.external),
         asBase64String: Boolean(userOptions.asBase64String),
-        signAlgorithm: window.EndUser.SignAlgo.DSTU4145WithGOST34311,
+        signAlgorithm: (window as any).EndUser.SignAlgo.DSTU4145WithGOST34311,
         previousSign: userOptions.previousSign || null,
-        signType: window.EndUser.SignType.CAdES_X_Long,
+        signType: (window as any).EndUser.SignType.CAdES_X_Long,
       };
 
       return (await this.widget.endUser.SignData(

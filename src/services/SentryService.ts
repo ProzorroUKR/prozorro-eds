@@ -1,6 +1,7 @@
 import { init, captureException, captureMessage } from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
-import packageJson from "../../package.json";
+import packageJson from "@@/package.json";
+import { MODE, SENTRY_DSN, SENTRY_TRACES_SAMPLE_RATE } from "@/constants/env";
 
 export interface ISentryService {
   captureException(exception: any, captureContext?: any): string;
@@ -10,11 +11,11 @@ export interface ISentryService {
 export class SentryService implements ISentryService {
   constructor() {
     init({
-      dsn: import.meta.env.VITE_SENTRY_DSN,
+      dsn: SENTRY_DSN,
+      environment: MODE,
       release: packageJson.version,
-      environment: import.meta.env.MODE,
       integrations: [new Integrations.BrowserTracing() as unknown as any],
-      tracesSampleRate: Number(import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE),
+      tracesSampleRate: SENTRY_TRACES_SAMPLE_RATE,
     });
   }
 

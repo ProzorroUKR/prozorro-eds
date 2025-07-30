@@ -1,3 +1,5 @@
+import { PATH_SIGN_WIDGET } from "@/constants/env";
+
 export const WIDGET = {
   ID: {
     /**
@@ -15,5 +17,5 @@ export const WIDGET = {
   /**
    * URI з адресою за якою розташована сторінка SignWidget
    */
-  PATH: import.meta.env.VITE_PATH_SIGN_WIDGET || "",
+  PATH: PATH_SIGN_WIDGET,
 } as const;

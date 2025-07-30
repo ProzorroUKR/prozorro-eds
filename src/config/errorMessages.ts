@@ -1,4 +1,4 @@
-import type { ErrorMessageType } from "~/types/ErrorMessageType";
+import type { ErrorMessageType } from "@/types/ErrorMessageType";
 
 export const errorMessages: Record<string, ErrorMessageType> = {
   libraryInit: {

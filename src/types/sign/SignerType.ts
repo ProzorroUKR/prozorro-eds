@@ -1,4 +1,4 @@
-import type { TimeType } from "~/types/sign/TimeType";
+import type { TimeType } from "@/types/sign/TimeType";
 
 export type SignerType = {
   isFilled: boolean;

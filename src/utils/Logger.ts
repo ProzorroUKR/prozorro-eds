@@ -1,4 +1,4 @@
-import { PREFIX } from "~/constants/prefixes";
+import { PREFIX } from "@/constants/prefixes";
 
 export interface ILogger {
   log(message: any): void;

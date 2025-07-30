@@ -1,6 +1,6 @@
-import { documentSign } from "~/config/documents/documentSign";
-import { documentSignV2 } from "~/config/documents/documentSignV2";
-import type { FileType } from "~/types/FileType";
+import { documentSign } from "@/config/documents/documentSign";
+import { documentSignV2 } from "@/config/documents/documentSignV2";
+import type { FileType } from "@/types/FileType";
 
 export const DOCUMENTS_TO_SKIP: FileType[] = [documentSign, documentSignV2];
 

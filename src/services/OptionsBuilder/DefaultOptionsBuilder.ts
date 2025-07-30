@@ -1,5 +1,5 @@
 import type { OptionsBuilderInterface } from "./OptionsBuilderInterface";
-import type { DefaultOptionsType } from "~/types/DefaultOptionsType";
+import type { DefaultOptionsType } from "@/types/DefaultOptionsType";
 
 export class DefaultOptionsBuilder implements OptionsBuilderInterface {
   private options: Record<any, any> = {};

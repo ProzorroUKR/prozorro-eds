@@ -1,4 +1,4 @@
-import type { ApiSignTimeType } from "~/types/http/ApiSignTimeType";
+import type { ApiSignTimeType } from "@/types/http/ApiSignTimeType";
 
 export type ApiSignSignerType = {
   bFilled: boolean;

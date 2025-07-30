@@ -30,7 +30,7 @@
     "test": "vitest",
     "preview": "vite preview",
     "test:coverage": "vitest --coverage",
-    "lint:scripts": "eslint . --ext .ts",
+    "lint:scripts": "eslint ./src --ext .ts",
     "format:scripts": "prettier . --write",
     "format": "npm run format:scripts && npm run format:styles",
     "types": "tsc --project tsconfig.types.json"

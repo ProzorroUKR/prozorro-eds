@@ -1,10 +1,10 @@
 import { get } from "lodash";
-import { STRING } from "~/constants/string";
-import { TypeChecker } from "~/utils/checker/TypeChecker";
-import { DOCUMENT_FIELDS, DOCUMENTS_TO_SKIP, FIELDS_TO_COMPARE, SIGN_DOC_DELETE_STATUSES } from "~/config/compareSign";
-import { deepClone } from "~/utils/helpers";
-import type { FileType } from "~/types/FileType";
-import { REGEX } from "~/constants/regex";
+import { STRING } from "@/constants/string";
+import { TypeChecker } from "@/utils/checker/TypeChecker";
+import { DOCUMENT_FIELDS, DOCUMENTS_TO_SKIP, FIELDS_TO_COMPARE, SIGN_DOC_DELETE_STATUSES } from "@/config/compareSign";
+import { deepClone } from "@/utils/helpers";
+import type { FileType } from "@/types/FileType";
+import { REGEX } from "@/constants/regex";
 
 const EMPTY_ARRAY = 0;
 const FIRST_INDEX = 0;

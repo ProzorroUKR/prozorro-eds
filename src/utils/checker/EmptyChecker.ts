@@ -1,4 +1,4 @@
-import { TypeChecker } from "~/utils/checker/TypeChecker";
+import { TypeChecker } from "@/utils/checker/TypeChecker";
 
 export interface IEmptyChecker {
   isEmptyString(value: any): boolean;

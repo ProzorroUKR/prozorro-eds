@@ -1,13 +1,13 @@
-import { apiSignSignerKeys } from "~/config/apiSign/apiSignKeys";
-import { keysSignerMap, keysTimeMap } from "~/config/apiSign/apiSignKeysMap";
-import { errorMessages } from "~/config/errorMessages.ts";
-import { EdsError } from "~/services/Error/EdsError";
-import type { ApiSignDecryptResponseType } from "~/types/http/ApiSignDecryptResponseType";
-import type { ApiSignSignerType } from "~/types/http/ApiSignSignerType";
-import type { ApiSignTimeType } from "~/types/http/ApiSignTimeType";
-import type { SignType } from "~/types/sign/SignType";
-import type { SignerType } from "~/types/sign/SignerType";
-import { Assert } from "~/utils/Assert";
+import { apiSignSignerKeys } from "@/config/apiSign/apiSignKeys";
+import { keysSignerMap, keysTimeMap } from "@/config/apiSign/apiSignKeysMap";
+import { errorMessages } from "@/config/errorMessages";
+import { EdsError } from "@/services/Error/EdsError";
+import type { ApiSignDecryptResponseType } from "@/types/http/ApiSignDecryptResponseType";
+import type { ApiSignSignerType } from "@/types/http/ApiSignSignerType";
+import type { ApiSignTimeType } from "@/types/http/ApiSignTimeType";
+import type { SignType } from "@/types/sign/SignType";
+import type { SignerType } from "@/types/sign/SignerType";
+import { Assert } from "@/utils/Assert";
 
 export interface IApiSignAdapter {
   prepareDecryptResponse(response: ApiSignDecryptResponseType): SignType;

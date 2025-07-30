@@ -1,7 +1,7 @@
-import { errorMessages } from "~/config/errorMessages.ts";
-import { WIDGET } from "~/config/widget";
-import { Assert } from "~/utils/Assert";
-import type { EndUser } from "~/types/IIT/Widget/LibraryInterface";
+import { errorMessages } from "@/config/errorMessages";
+import { WIDGET } from "@/config/widget";
+import { Assert } from "@/utils/Assert";
+import type { EndUser } from "@/types/IIT/Widget/LibraryInterface";
 
 export interface IWidgetFactory {
   create(): Promise<EndUser.Instance>;
@@ -9,7 +9,12 @@ export interface IWidgetFactory {
 
 export class WidgetFactory implements IWidgetFactory {
   async create(): Promise<EndUser.Instance> {
-    const widget = new window.EndUser(WIDGET.ID.PARENT, WIDGET.ID.MAIN, WIDGET.PATH, window.EndUser.FormType.ReadPKey);
+    const widget = new (window as any).EndUser(
+      WIDGET.ID.PARENT,
+      WIDGET.ID.MAIN,
+      WIDGET.PATH,
+      (window as any).EndUser.FormType.ReadPKey
+    );
     await this.load();
     return widget;
   }

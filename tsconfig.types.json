@@ -13,7 +13,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "files": [
-    "./src/services/Eds.ts"
-  ],
+  "files": ["./src/services/Eds.ts"]
 }

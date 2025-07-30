@@ -1,8 +1,8 @@
-import { errorMessages } from "~/config/errorMessages.ts";
-import { EdsError } from "~/services/Error/EdsError";
-import type { CertificateType } from "~/types/IIT/Widget/CertificateType";
-import type { IWidgetUserService } from "~/services/Widget/WidgetUserService.ts";
-import type { EndUser } from "~/types/IIT/Widget/LibraryInterface";
+import { errorMessages } from "@/config/errorMessages";
+import { EdsError } from "@/services/Error/EdsError";
+import type { CertificateType } from "@/types/IIT/Widget/CertificateType";
+import type { IWidgetUserService } from "@/services/Widget/WidgetUserService";
+import type { EndUser } from "@/types/IIT/Widget/LibraryInterface";
 
 export interface IWidgetService extends IWidgetUserService {
   addReadKeyListener(): void;

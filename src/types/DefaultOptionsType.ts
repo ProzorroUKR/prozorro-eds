@@ -1,4 +1,4 @@
-import type { CertificateType } from "~/types/IIT/Widget/CertificateType";
+import type { CertificateType } from "@/types/IIT/Widget/CertificateType";
 
 export type DefaultOptionsType = {
   ignoreFields: string[];

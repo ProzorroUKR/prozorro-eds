@@ -1,5 +1,5 @@
-import { SentryService } from "~/services/SentryService";
-import type { ErrorMessageType } from "~/types/ErrorMessageType";
+import { SentryService } from "@/services/SentryService";
+import type { ErrorMessageType } from "@/types/ErrorMessageType";
 
 export abstract class AbstractError extends Error {
   private readonly sentryService = new SentryService();

@@ -1,10 +1,10 @@
-import { TypeChecker } from "~/utils/checker/TypeChecker";
-import type { ErrorMessageType } from "~/types/ErrorMessageType";
-import { EmptyChecker } from "~/utils/checker/EmptyChecker";
-import { TypeCheckFactory } from "~/services/DataTypeValidator/TypeCheckFactory";
-import { typeCheckStrategyMap } from "~/services/DataTypeValidator/TypeCheckStrategyMap";
-import { AssertionError } from "~/services/Error/AssertionError";
-import { errorMessages } from "~/config/errorMessages.ts";
+import { TypeChecker } from "@/utils/checker/TypeChecker";
+import type { ErrorMessageType } from "@/types/ErrorMessageType";
+import { EmptyChecker } from "@/utils/checker/EmptyChecker";
+import { TypeCheckFactory } from "@/services/DataTypeValidator/TypeCheckFactory";
+import { typeCheckStrategyMap } from "@/services/DataTypeValidator/TypeCheckStrategyMap";
+import { AssertionError } from "@/services/Error/AssertionError";
+import { errorMessages } from "@/config/errorMessages";
 
 export interface IDataTypeValidator {
   validate(data: any, typesList: string[] | string, error?: ErrorMessageType): void;

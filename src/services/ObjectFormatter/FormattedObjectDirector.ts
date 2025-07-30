@@ -1,8 +1,8 @@
-import { TypeChecker } from "~/utils/checker/TypeChecker";
-import { EmptyChecker } from "~/utils/checker/EmptyChecker";
-import { EdsError } from "~/services/Error/EdsError";
-import { errorMessages } from "~/config/errorMessages.ts";
-import type { IFormattedObjectBuilder } from "~/services/ObjectFormatter/FormattedObjectBuilder.ts";
+import { TypeChecker } from "@/utils/checker/TypeChecker";
+import { EmptyChecker } from "@/utils/checker/EmptyChecker";
+import { EdsError } from "@/services/Error/EdsError";
+import { errorMessages } from "@/config/errorMessages";
+import type { IFormattedObjectBuilder } from "@/services/ObjectFormatter/FormattedObjectBuilder";
 
 export interface IFormattedObjectDirector {
   build(data: Record<string, any>): Record<string, any>;

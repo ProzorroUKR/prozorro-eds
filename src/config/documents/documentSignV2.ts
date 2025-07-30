@@ -1,4 +1,4 @@
-import type { FileType } from "~/types/FileType";
+import type { FileType } from "@/types/FileType";
 
 export const documentSignV2: FileType = {
   title: "sign.p7s",

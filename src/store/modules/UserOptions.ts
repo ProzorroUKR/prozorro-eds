@@ -1,6 +1,6 @@
-import type { UserOptionsType } from "~/types/UserOptionsType";
-import type { CertificateType } from "~/types/IIT/Widget/CertificateType";
-import type { DefaultOptionsType } from "~/types/DefaultOptionsType";
+import type { UserOptionsType } from "@/types/UserOptionsType";
+import type { CertificateType } from "@/types/IIT/Widget/CertificateType";
+import type { DefaultOptionsType } from "@/types/DefaultOptionsType";
 
 export interface IUserOptions {
   ignoreFields: string[];

@@ -1,8 +1,8 @@
-import { errorMessages } from "~/config/errorMessages.ts";
-import { ENCODING } from "~/constants/encoding";
-import type { ILogger } from "~/utils/Logger";
-import { EdsError } from "~/services/Error/EdsError";
-import type { IBase64 } from "~/utils/Base64";
+import { errorMessages } from "@/config/errorMessages";
+import { ENCODING } from "@/constants/encoding";
+import type { ILogger } from "@/utils/Logger";
+import { EdsError } from "@/services/Error/EdsError";
+import type { IBase64 } from "@/utils/Base64";
 
 export interface IObjectDecoder {
   decode(data: string): Record<any, any>;

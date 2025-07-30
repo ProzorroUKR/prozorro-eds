@@ -1,8 +1,8 @@
-import { ValidationTypes } from "~/services/DataTypeValidator/ValidationTypes";
-import { StringValidator } from "~/services/DataTypeValidator/typesHandler/StringValidator.ts";
-import { ArrayValidator } from "~/services/DataTypeValidator/typesHandler/ArrayValidator.ts";
-import { ObjectValidator } from "~/services/DataTypeValidator/typesHandler/ObjectValidator.ts";
-import { ArrayBufferValidator } from "~/services/DataTypeValidator/typesHandler/ArrayBufferValidator.ts";
+import { ValidationTypes } from "@/services/DataTypeValidator/ValidationTypes";
+import { StringValidator } from "@/services/DataTypeValidator/typesHandler/StringValidator";
+import { ArrayValidator } from "@/services/DataTypeValidator/typesHandler/ArrayValidator";
+import { ObjectValidator } from "@/services/DataTypeValidator/typesHandler/ObjectValidator";
+import { ArrayBufferValidator } from "@/services/DataTypeValidator/typesHandler/ArrayBufferValidator";
 
 export const typeCheckStrategyMap = new Map<string, any>()
   .set(ValidationTypes.STRING, StringValidator)

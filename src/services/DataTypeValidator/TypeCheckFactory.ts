@@ -1,7 +1,7 @@
-import type { ITypeChecker } from "~/utils/checker/TypeChecker.ts";
-import type { IEmptyChecker } from "~/utils/checker/EmptyChecker.ts";
-import type { TypeHandlerInterface } from "~/services/DataTypeValidator/TypeHandlerInterface";
-import { Assert } from "~/utils/Assert";
+import type { ITypeChecker } from "@/utils/checker/TypeChecker.ts";
+import type { IEmptyChecker } from "@/utils/checker/EmptyChecker.ts";
+import type { TypeHandlerInterface } from "@/services/DataTypeValidator/TypeHandlerInterface";
+import { Assert } from "@/utils/Assert";
 
 export class TypeCheckFactory {
   constructor(

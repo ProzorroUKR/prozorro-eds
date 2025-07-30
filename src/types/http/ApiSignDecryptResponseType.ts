@@ -1,5 +1,5 @@
-import type { ApiSignDecryptErrorType } from "~/types/http/ApiSignDecryptErrorType";
-import type { ApiSignSignerType } from "~/types/http/ApiSignSignerType";
+import type { ApiSignDecryptErrorType } from "@/types/http/ApiSignDecryptErrorType";
+import type { ApiSignSignerType } from "@/types/http/ApiSignSignerType";
 
 export type ApiSignDecryptResponseType = {
   status?: "error";

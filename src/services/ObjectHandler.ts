@@ -1,19 +1,19 @@
 import type { AxiosStatic } from "axios";
 import { DiffPatcher } from "jsondiffpatch";
-import { DOCUMENTS_SIGN } from "~/config/compareSign";
-import { errorMessages } from "~/config/errorMessages.ts";
-import { EdsError } from "~/services/Error/EdsError";
-import type { FileType } from "~/types/FileType";
-import type { DocumentType } from "~/types/DocumentType";
-import type { VerifyDocumentType } from "~/types/VerifyDocumentType";
-import type { VerifyObjectResponseType } from "~/types/VerifyObjectResponseType";
-import { BlobHandler } from "~/utils/BlobHandler";
-import type { IEmptyChecker } from "~/utils/checker/EmptyChecker.ts";
-import type { ITypeChecker } from "~/utils/checker/TypeChecker.ts";
-import type { ILogger } from "~/utils/Logger";
-import type { ISignService } from "~/services/SignService.ts";
-import type { IFormattedObjectDirector } from "~/services/ObjectFormatter/FormattedObjectDirector.ts";
-import type { IObjectDecoder } from "~/services/ObjectDecoder.ts";
+import { DOCUMENTS_SIGN } from "@/config/compareSign";
+import { errorMessages } from "@/config/errorMessages";
+import { EdsError } from "@/services/Error/EdsError";
+import type { FileType } from "@/types/FileType";
+import type { DocumentType } from "@/types/DocumentType";
+import type { VerifyDocumentType } from "@/types/VerifyDocumentType";
+import type { VerifyObjectResponseType } from "@/types/VerifyObjectResponseType";
+import { BlobHandler } from "@/utils/BlobHandler";
+import type { IEmptyChecker } from "@/utils/checker/EmptyChecker";
+import type { ITypeChecker } from "@/utils/checker/TypeChecker";
+import type { ILogger } from "@/utils/Logger";
+import type { ISignService } from "@/services/SignService";
+import type { IFormattedObjectDirector } from "@/services/ObjectFormatter/FormattedObjectDirector";
+import type { IObjectDecoder } from "@/services/ObjectDecoder";
 
 const DELTA = 1;
 

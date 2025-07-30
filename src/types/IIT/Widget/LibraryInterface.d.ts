@@ -1,7 +1,7 @@
-import { ConstantsInterface } from "~/types/IIT/Widget/ConstantsInterface";
-import type { CCSType } from "~/types/IIT/Widget/config/CCSType.ts";
-import type { EventType } from "~/types/IIT/Widget/config/EventType.ts";
-import type { RevocationReason } from "~/types/IIT/Widget/config/RevocationReason.ts";
+import { ConstantsInterface } from "@/types/IIT/Widget/ConstantsInterface";
+import type { CCSType } from "@/types/IIT/Widget/config/CCSType.ts";
+import type { EventType } from "@/types/IIT/Widget/config/EventType.ts";
+import type { RevocationReason } from "@/types/IIT/Widget/config/RevocationReason.ts";
 
 declare namespace EndUser {
   interface Instance extends ConstantsInterface {
@@ -74,8 +74,7 @@ declare namespace EndUser {
        * Інформація про користувача, яку необхідно змінити
        * в новому сертифікаті. Доступні поля phone, EMail. Опціональний параметр
        */
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      euParams?: object // todo describe
+      euParams?: Record<any, any>
     ): Promise<void>;
 
     /**
@@ -88,8 +87,7 @@ declare namespace EndUser {
       /**
        * Параметри сертифікату
        */
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      certParams: object // todo describe
+      certParams: Record<any, any>
     ): Promise<void>;
 
     /**

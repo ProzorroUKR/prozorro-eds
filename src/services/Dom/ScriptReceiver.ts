@@ -15,7 +15,7 @@ export class ScriptReceiver implements IScriptReceiver {
       script.type = SCRIPT_TYPE;
       script.async = Boolean(isAsync);
       script.defer = Boolean(isDefer);
-      // @ts-ignore
+      // @ts-expect-error
       script.onload = resolve;
       script.onerror = reject;
     });

@@ -1,8 +1,8 @@
-import { apiSignSignerKeys, apiSignTimeKeys } from "~/config/apiSign/apiSignKeys";
-import type { ApiSignSignerType } from "~/types/http/ApiSignSignerType";
-import type { ApiSignTimeType } from "~/types/http/ApiSignTimeType";
-import type { SignerType } from "~/types/sign/SignerType";
-import type { TimeType } from "~/types/sign/TimeType";
+import { apiSignSignerKeys, apiSignTimeKeys } from "@/config/apiSign/apiSignKeys";
+import type { ApiSignSignerType } from "@/types/http/ApiSignSignerType";
+import type { ApiSignTimeType } from "@/types/http/ApiSignTimeType";
+import type { SignerType } from "@/types/sign/SignerType";
+import type { TimeType } from "@/types/sign/TimeType";
 
 export const keysSignerMap = new Map<keyof ApiSignSignerType, keyof SignerType>()
   .set(apiSignSignerKeys.isFilled, "isFilled")

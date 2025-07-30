@@ -1,4 +1,4 @@
-import type { EndUser } from "~/types/IIT/Widget/LibraryInterface";
+import type { EndUser } from "@/types/IIT/Widget/LibraryInterface";
 
 export interface IWidgetEndUser {
   endUser: EndUser.Instance | undefined;

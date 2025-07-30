@@ -1,4 +1,4 @@
-import type { SignerType } from "~/types/sign/SignerType";
+import type { SignerType } from "@/types/sign/SignerType";
 
 export type VerifyObjectResponseType = {
   difference?: Record<any, any>;

@@ -1,4 +1,4 @@
-import type { UserOptionsType } from "~/types/UserOptionsType";
+import type { UserOptionsType } from "@/types/UserOptionsType";
 import type { OptionsBuilderInterface } from "./OptionsBuilderInterface";
 
 export class OptionsBuildDirector {

@@ -1,4 +1,4 @@
-import type { IWidgetService } from "~/services/Widget/WidgetService.ts";
+import type { IWidgetService } from "@/services/Widget/WidgetService";
 
 export interface IWidgetUserService {
   resetKey(): Promise<void>;

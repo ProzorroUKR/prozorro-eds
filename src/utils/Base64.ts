@@ -1,5 +1,5 @@
-import { STRING } from "~/constants/string";
-import { EdsError } from "~/services/Error/EdsError";
+import { STRING } from "@/constants/string";
+import { EdsError } from "@/services/Error/EdsError";
 
 export interface IBase64 {
   encode(data: Uint8Array): string;

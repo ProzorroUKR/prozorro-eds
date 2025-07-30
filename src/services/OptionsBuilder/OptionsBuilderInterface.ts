@@ -1,4 +1,4 @@
-import type { DefaultOptionsType } from "~/types/DefaultOptionsType";
+import type { DefaultOptionsType } from "@/types/DefaultOptionsType";
 
 export interface OptionsBuilderInterface {
   getOptions(): DefaultOptionsType;
