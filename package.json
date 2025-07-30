@@ -1,7 +1,7 @@
 {
   "name": "prozorro-eds",
   "private": true,
-  "version": "1.0.1",
+  "version": "0.0.1",
   "description": "Wrapper over IIT libraries",
   "author": "Dmytro Rybachek",
   "license": "MIT",
@@ -33,7 +33,9 @@
     "lint:scripts": "eslint ./src --ext .ts",
     "format:scripts": "prettier . --write",
     "format": "npm run format:scripts && npm run format:styles",
-    "types": "tsc --project tsconfig.types.json"
+    "types": "tsc --project tsconfig.types.json",
+    "version:patch": "npm version patch",
+    "version:major": "npm version major"
   },
   "devDependencies": {
     "@sentry/types": "^9.40.0",
