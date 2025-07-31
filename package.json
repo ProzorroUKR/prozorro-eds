@@ -24,7 +24,6 @@
   ],
   "scripts": {
     "dev": "vite --config vite.config.lib.ts",
-    "build:libw": "rimraf build && tsc && vite build --config vite.config.lib.ts && npm run types && copyfiles ./package.json build",
     "build:lib": "rimraf build/**/* && tsc && vite build --config vite.config.lib.ts && npm run types && copyfiles ./package.json build",
     "build:app": "vite build --config vite.config.app.ts",
     "build": "npm run build:lib && npm run build:app",
