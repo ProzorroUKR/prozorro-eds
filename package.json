@@ -10,13 +10,13 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/prozorro-eds.es.js",
-      "require": "./dist/prozorro-eds.cjs.js",
-      "types": "./dist/index.d.ts"
-    },
     "./dist/": {
       "import": "./dist/"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/prozorro-eds.es.js",
+      "require": "./dist/prozorro-eds.cjs.js"
     }
   },
   "files": [
@@ -24,6 +24,7 @@
   ],
   "scripts": {
     "dev": "vite --config vite.config.lib.ts",
+    "build:libw": "rimraf build && tsc && vite build --config vite.config.lib.ts && npm run types && copyfiles ./package.json build",
     "build:lib": "rimraf build/**/* && tsc && vite build --config vite.config.lib.ts && npm run types && copyfiles ./package.json build",
     "build:app": "vite build --config vite.config.app.ts",
     "build": "npm run build:lib && npm run build:app",

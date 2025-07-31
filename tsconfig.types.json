@@ -9,9 +9,18 @@
     "outFile": "./build/dist/prozorro-eds.d.ts",
     "declarationMap": true,
     "skipLibCheck": true,
+    "target": "ESNext",
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "types": ["vite/client", "node"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": ["ESNext", "DOM"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@@/*": ["./*"]
     }
   },
-  "files": ["./src/services/Eds.ts"]
+  "files": ["./src/services/Eds.ts"],
+  "type": "module"
 }
