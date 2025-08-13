@@ -1,0 +1,280 @@
+default:
+  interruptible: true
+
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_ID || $CI_MERGE_REQUEST_EVENT_TYPE
+      when: never
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: never
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_TAG
+    - when: never
+
+  auto_cancel:
+    on_new_commit: interruptible
+
+stages:
+  - build
+  - "deploy dev"
+  - "deploy staging"
+  - "stop dev"
+  - publish-npm
+  - publish-chart
+
+.base_app_img_build:
+  id_tokens:
+    ID_VAULT:
+      aud: http://vault-np.k8s.prozorro.gov.ua
+  stage: build
+  variables:
+    IMAGE_TAG: $CI_COMMIT_REF_NAME-$CI_PIPELINE_ID
+    VAULT_PATH: prozorro-eds/data/env_dev
+    VAULT_ADDR: http://vault-np.k8s.prozorro.gov.ua
+  image:
+    name: docker-registry.prozorro.gov.ua/web-projects/docker-images/kaniko:custom
+    entrypoint: [""]
+  tags:
+    - kube-dev
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - >
+      VAULT_TOKEN=$(curl -s --request POST
+      --data '{"role": "client-services", "jwt": "'"$ID_VAULT"'"}'
+      $VAULT_ADDR/v1/auth/jwt/login | jq '.auth.client_token' | tr -d '\"')
+    - >
+      curl -s --header "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/$VAULT_PATH|
+      jq -r '.data.data | to_entries[] | [.key, .value] | @tsv' |sed -e 's/\t/=/g' > .env.production
+  script:
+    - >
+      /kaniko/executor --context $CI_PROJECT_DIR
+      --dockerfile $CI_PROJECT_DIR/Dockerfile
+      --destination $CI_REGISTRY_IMAGE:$IMAGE_TAG
+      --destination $CI_REGISTRY_IMAGE:latest
+      --registry-mirror $REGISTRY_MIRROR
+      --insecure-registry $REGISTRY_MIRROR
+      --skip-tls-verify
+      --cache=true
+  rules:
+    - if: $CI_COMMIT_BRANCH
+
+
+Build_app_img_dev:
+  extends: .base_app_img_build
+
+
+Build_app_img_staging:
+  extends: .base_app_img_build
+  variables:
+    IMAGE_TAG: $CI_COMMIT_TAG-staging
+    VAULT_PATH: prozorro-eds/data/env_st
+  rules:
+    - if: $CI_COMMIT_TAG
+
+
+.base_app_deploy: &base_app_deploy
+  id_tokens:
+    ID_VAULT:
+      aud: http://vault-np.k8s.prozorro.gov.ua
+  dependencies: []
+  variables:
+    DEPLOYMENT_NAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    VAULT_ADDR: http://vault-np.k8s.prozorro.gov.ua
+    HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.k8s.prozorro.gov.ua
+    IMAGE_TAG: $CI_COMMIT_REF_NAME-$CI_PIPELINE_ID
+    KUBE_NAMESPACE: eds-dev
+    KUBE_CONF: KUBE_CONF_DEV_ADMIN
+    REPLICA_COUNT: 1
+  image: docker-registry.prozorro.gov.ua/web-projects/docker-images/alpine-helm-tools:3.5.0
+  before_script:
+    - cd ./charts && mkdir -p ~/.kube
+    - |
+      VAULT_TOKEN=$(curl -s --request POST \
+      --data '{"role": "client-services", "jwt": "'"$ID_VAULT"'"}' \
+      $VAULT_ADDR/v1/auth/jwt/login | jq '.auth.client_token' | tr -d '\"')
+    - >
+      curl -s --header "X-Vault-Token: $VAULT_TOKEN"
+      -X GET $VAULT_ADDR/v1/kuber/data/config |
+      jq -r ".data.data | .$KUBE_CONF" | base64 -d > ~/.kube/config
+  script:
+    - >
+      helm upgrade -i $DEPLOYMENT_NAME .
+      --namespace $KUBE_NAMESPACE
+      --create-namespace
+      --set ingress.hosts[0].host=$HOSTNAME
+      --set ingress.hosts[0].paths[0].path="/"
+      --set ingress.hosts[0].paths[0].pathType=ImplementationSpecific
+      --set ingress.tls[0].hosts[0]=$HOSTNAME
+      --set ingress.tls[0].secretName=star-k8s-prozorro-gov-ua-tls
+      --set replicaCount=$REPLICA_COUNT
+      --set image.repository=$CI_REGISTRY_IMAGE
+      --set image.tag=$IMAGE_TAG
+      --set deploymentAnnotations."reloader\.stakater\.com/auto"="\"true\""
+      --set devmode=true
+  tags:
+    - kube-dev
+  rules:
+    - if: $CI_COMMIT_BRANCH
+
+Deploy_dev:
+  <<: *base_app_deploy
+  stage: "deploy dev"
+  environment:
+    name: development/$CI_COMMIT_REF_NAME
+    url: http://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.k8s.prozorro.gov.ua
+    on_stop: Stop_dev
+    auto_stop_in: 3 week
+
+Stop_dev:
+  id_tokens:
+    ID_VAULT:
+      aud: http://vault-np.k8s.prozorro.gov.ua
+  dependencies: []
+  variables:
+    DEPLOYMENT_NAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    VAULT_ADDR: http://vault-np.k8s.prozorro.gov.ua
+    KUBE_CONF: KUBE_CONF_DEV_ADMIN
+    KUBE_NAMESPACE: eds-dev
+    GIT_STRATEGY: none
+  stage: "stop dev"
+  image: docker-registry.prozorro.gov.ua/web-projects/docker-images/alpine-helm-tools:3.5.0
+  environment:
+    name: development/$CI_COMMIT_REF_NAME
+    url: http://$DEPLOYMENT_NAME.k8s.prozorro.gov.ua
+    action: stop
+  before_script:
+    - mkdir -p ~/.kube
+    - >
+      VAULT_TOKEN=$(curl -s --request POST
+      --data '{"role": "client-services", "jwt": "'"$ID_VAULT"'"}'
+      $VAULT_ADDR/v1/auth/jwt/login | jq '.auth.client_token' | tr -d '\"')
+    - >
+      curl -s --header "X-Vault-Token: $VAULT_TOKEN"
+      -X GET $VAULT_ADDR/v1/kuber/data/config |
+      jq -r ".data.data | .$KUBE_CONF" | base64 -d > ~/.kube/config
+  script:
+    - helm delete $DEPLOYMENT_NAME --namespace $KUBE_NAMESPACE
+  tags:
+    - kube-dev
+  rules:
+    - if: $CI_COMMIT_BRANCH && $BUILT_AS_BACKEND_BRIDGE == null
+      when: manual
+
+
+Deploy staging kube:
+  stage: "deploy staging"
+  environment:
+    name: staging-front
+    url: https://eds-staging-new.prozorro.gov.ua
+  variables:
+    IMAGE_TAG: $CI_COMMIT_TAG-staging
+  image: docker-registry.prozorro.gov.ua/web-projects/docker-images/alpine-git:1.4
+  script:
+    - |
+      ssh-keyscan -p 28722 195.178.150.84 > /root/.ssh/known_hosts
+      git clone --depth 1 --single-branch git@git.prozorro.gov.ua:argocd/helm-charts.git
+      cd helm-charts
+      sed -i "s/tag: \".*\"/tag: \"$IMAGE_TAG\"/g" prozorro-eds-staging-values.yaml
+      git config --global user.email "gitlab@git.prozorro.gov.ua" &&
+      git config --global user.name "Gitlab CI" &&
+      git pull && git add * && git commit -m "Deploy via Gitlab CI" && git push
+  tags:
+    - kube-dev
+  rules:
+    - if: $CI_COMMIT_TAG
+
+
+.base_app_publish: &base_app_publish
+  id_tokens:
+    ID_VAULT:
+      aud: http://vault-np.k8s.prozorro.gov.ua
+  stage: publish-npm
+  variables:
+    VAULT_ADDR: http://vault-np.k8s.prozorro.gov.ua
+    NPM_PUBLISH_PARAMS: ""
+    NPM_APP_VERSION: $CI_COMMIT_TAG
+  image: docker-registry.prozorro.gov.ua/web-projects/docker-images/node:22.11.0-alpine
+  before_script:
+    - >
+      if [[ -z "$IS_PROD" ]] ; then
+        VAULT_TOKEN=$(curl -s --request POST \
+        --data '{"role": "client-services", "jwt": "'"$ID_VAULT"'"}' \
+        $VAULT_ADDR/v1/auth/jwt/login | jq '.auth.client_token' | tr -d '\"')
+      fi
+    - >
+      NPM_TOKEN=$(curl -s --header "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/prozorro-eds/data/npm-token | jq -r .data.data.token)
+    - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+    - >
+      curl -s --header "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/$VAULT_PATH|
+      jq -r '.data.data | to_entries[] | [.key, .value] | @tsv' |sed -e 's/\t/=/g' > .env.production
+  script:
+    - npm version $NPM_APP_VERSION --no-git-tag-version --allow-same-version
+    - npm install
+    - npm run build
+    - npm publish $NPM_PUBLISH_PARAMS
+  tags:
+    - kube-dev
+  rules:
+    - if: $CI_COMMIT_TAG
+
+publish_stage:
+  <<: *base_app_publish
+  variables:
+    VAULT_ADDR: http://vault-np.k8s.prozorro.gov.ua
+    VAULT_PATH: prozorro-eds/data/env_st
+    NPM_PUBLISH_PARAMS: "--access public --tag beta"
+    NPM_APP_VERSION: $CI_COMMIT_TAG-beta
+
+publish_prod:
+  <<: *base_app_publish
+  variables:
+    VAULT_ADDR: http://vault-np.k8s.prozorro.gov.ua
+    VAULT_PATH: prozorro-eds/data/env_prod
+    NPM_PUBLISH_PARAMS: "--access public"
+    NPM_APP_VERSION: $CI_COMMIT_TAG
+    IS_PROD: 1
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+
+sync_version_back:
+  dependencies: []
+  stage: publish-npm
+  image: docker-registry.prozorro.gov.ua/web-projects/docker-images/node:22.11.0-alpine
+  before_script:
+    - ssh-keyscan -p 28722 195.178.150.84 > /root/.ssh/known_hosts
+    - git config --global user.email "gitlab@git.prozorro.gov.ua"
+    - git config --global user.name  "GitLab CI"
+    - git remote set-url origin "git@git.prozorro.gov.ua:Web-Projects/client-services/prozorro-eds.git"
+    - git fetch origin $CI_DEFAULT_BRANCH --tags
+    - git checkout -B $CI_DEFAULT_BRANCH origin/$CI_DEFAULT_BRANCH
+  script:
+    - |
+      npm version $CI_COMMIT_TAG --no-git-tag-version --allow-same-version
+      if git diff --quiet -- package.json; then
+        echo "🟢 package.json have same version as TAG"
+        exit 0
+      else
+        git add package.json
+        git commit -m "ci: sync version $VERSION from tag [skip ci]"
+        git push
+      fi
+  tags:
+    - kube-dev
+  rules:
+    - if: $CI_COMMIT_TAG
+
+publish-chart:
+  stage: publish-chart
+  image: docker-registry.prozorro.gov.ua/web-projects/docker-images/alpine-helm-tools:3.5.0
+  needs: []
+  tags:
+    - kube-dev
+  before_script:
+    - CHART_VERSION=$(helm show chart charts | grep version | cut -d ' ' -f 2 | tr -d "\n")
+  script:
+    - helm package charts
+    - curl --request POST --user "gitlab-ci-token:${CI_JOB_TOKEN}" --form "chart=@${CI_PROJECT_NAME}-${CHART_VERSION}.tgz" ${CI_SERVER_URL}/api/v4/projects/${CI_PROJECT_ID}/packages/helm/api/${CI_PROJECT_NAME}/charts
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
