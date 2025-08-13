@@ -1,4 +1,4 @@
-// import './public-path';
+import "@@/public/libs/eusign.js";
 import { Eds } from "./services/Eds";
 
 const eds = new Eds();

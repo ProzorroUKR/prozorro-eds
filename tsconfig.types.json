@@ -6,7 +6,7 @@
     "allowJs": false,
     "emitDeclarationOnly": true,
     "baseUrl": ".",
-    "outFile": "./build/dist/prozorro-eds.d.ts",
+    "outFile": "./dist/lib/prozorro-eds.d.ts",
     "declarationMap": true,
     "skipLibCheck": true,
     "target": "ESNext",

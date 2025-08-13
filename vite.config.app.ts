@@ -4,7 +4,7 @@ import path from "path";
 export default defineConfig({
   base: "./",
   build: {
-    outDir: "./build/app",
+    outDir: "./dist/app",
     emptyOutDir: false, // so it doesn't wipe out your library build
   },
   resolve: {
