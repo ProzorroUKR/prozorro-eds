@@ -12,4 +12,4 @@ RUN npm run build
 
 #STAGE 2
 FROM nginxinc/nginx-unprivileged:1.29-alpine
-COPY --from=builder /app/dist/app /usr/share/nginx/html
+COPY --from=builder /app/build/app /usr/share/nginx/html
