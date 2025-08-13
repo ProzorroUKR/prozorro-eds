@@ -1,7 +1,7 @@
 {
   "name": "@prozorro/prozorro-eds",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Wrapper over IIT libraries",
   "author": "Dmytro Rybachek",
   "license": "MIT",
@@ -24,24 +24,18 @@
   ],
   "scripts": {
     "dev": "vite --config vite.config.lib.ts",
-
     "build:lib": "tsc && vite build --config vite.config.lib.ts && npm run types && copyfiles ./package.json dist/lib && npm run removeFromBuild:lib",
     "build:app": "vite build --config vite.config.app.ts",
     "build": "npm run clean && npm run build:lib && npm run build:app",
-
     "test": "vitest",
     "preview": "vite preview",
     "test:coverage": "vitest --coverage",
-
     "lint:scripts": "eslint ./src --ext .ts",
     "format:scripts": "prettier . --write",
     "format": "npm run format:scripts && npm run format:styles",
-
     "types": "tsc --project tsconfig.types.json",
-
     "version:patch": "npm version patch",
     "version:major": "npm version major",
-
     "removeFromBuild:lib": "rimraf ./dist/lib/robots.txt ./dist/lib/test-data",
     "clean": "rimraf dist"
   },
