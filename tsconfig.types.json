@@ -1,26 +1,12 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "isolatedModules": false,
-    "noEmit": false,
-    "allowJs": false,
     "emitDeclarationOnly": true,
-    "baseUrl": ".",
-    "outFile": "./dist/lib/prozorro-eds.d.ts",
+    "outDir": "./dist",
+    "declaration": true,
     "declarationMap": true,
-    "skipLibCheck": true,
-    "target": "ESNext",
-    "module": "esnext",
-    "moduleResolution": "Node",
-    "types": ["vite/client", "node"],
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
-    "paths": {
-      "@/*": ["./src/*"],
-      "@@/*": ["./*"]
-    }
+    "stripInternal": true,
+    "noEmit": false
   },
-  "files": ["./src/services/Eds.ts"],
-  "type": "module"
+  "include": ["src"]
 }

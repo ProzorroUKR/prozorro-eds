@@ -2,21 +2,21 @@
   "name": "@prozorro/prozorro-eds",
   "private": false,
   "version": "0.0.2",
-  "description": "Wrapper over IIT libraries",
+  "description": "Wrapper over IIT library (Diia.Sign)",
   "author": "Dmytro Rybachek",
   "license": "MIT",
-  "main": "./dist/lib/prozorro-eds.cjs.js",
-  "module": "./dist/lib/prozorro-eds.es.js",
-  "types": "./dist/lib/prozorro-eds.d.ts",
+  "main": "./dist/prozorro-eds.cjs.js",
+  "module": "./dist/prozorro-eds.es.js",
+  "types": "./dist/prozorro-eds.d.ts",
   "type": "module",
   "exports": {
     "./dist/": {
-      "import": "./dist/lib"
+      "import": "./dist"
     },
     ".": {
-      "types": "./dist/lib/prozorro-eds.d.ts",
-      "import": "./dist/lib/prozorro-eds.es.js",
-      "require": "./dist/lib/prozorro-eds.cjs.js"
+      "types": "./dist/prozorro-eds.d.ts",
+      "import": "./dist/prozorro-eds.es.js",
+      "require": "./dist/prozorro-eds.cjs.js"
     }
   },
   "files": [
@@ -24,27 +24,28 @@
   ],
   "scripts": {
     "dev": "vite --config vite.config.lib.ts",
-
-    "build:lib": "tsc && vite build --config vite.config.lib.ts && npm run types && copyfiles ./package.json dist/lib && npm run removeFromBuild:lib",
+    "build:lib": "tsc && vite build --config vite.config.lib.ts && npm run types && copyfiles ./package.json dist && npm run removeFromBuild:lib",
     "build:app": "vite build --config vite.config.app.ts",
     "build": "npm run clean && npm run build:lib && npm run build:app",
-
     "test": "vitest",
     "preview": "vite preview",
     "test:coverage": "vitest --coverage",
-
     "lint:scripts": "eslint ./src --ext .ts",
     "format:scripts": "prettier . --write",
     "format": "npm run format:scripts && npm run format:styles",
-
     "types": "tsc --project tsconfig.types.json",
-
     "version:patch": "npm version patch",
     "version:major": "npm version major",
-
-    "removeFromBuild:lib": "rimraf ./dist/lib/robots.txt ./dist/lib/test-data",
+    "removeFromBuild:lib": "rimraf ./dist/robots.txt ./dist/test-data",
     "clean": "rimraf dist"
   },
+  "keywords": [
+    "typescript",
+    "library",
+    "prozorro",
+    "eds",
+    "encoding"
+  ],
   "devDependencies": {
     "@sentry/types": "^9.40.0",
     "@types/lodash": "^4.17.17",
@@ -63,6 +64,7 @@
     "typescript": "~5.7.3",
     "typescript-eslint": "^8.33.1",
     "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.1"
   },
   "dependencies": {

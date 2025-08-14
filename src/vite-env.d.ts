@@ -12,3 +12,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare interface Window {
+  eds: import("@/services/Eds").EdsInterface;
+  EndUser: import("@/types/IIT/Widget/LibraryInterface").EndUser.Instance;
+  edsDebug: boolean;
+}
