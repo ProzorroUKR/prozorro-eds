@@ -1,4 +1,3 @@
-import "@@/public/libs/eusign.js";
 import { Eds } from "./services/Eds";
 
 export * from "@/services/Eds";

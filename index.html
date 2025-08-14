@@ -854,19 +854,17 @@
         );
       });
 
-      const options = {
-        // debug: true,
-        debug: false,
-        callbackAfterAuth: certificates => {
-          showCertificates(certificates);
-          setWidgetState(widgetState.end);
-        },
-      };
-
       setInputValues();
 
       window.onload = async () => {
-        await window.eds.init(options);
+        await window.eds.init({
+          debug: true,
+          debug: false,
+          callbackAfterAuth: certificates => {
+            showCertificates(certificates);
+            setWidgetState(widgetState.end);
+          },
+        });
         const widgetService = await window.eds.loadWidget();
 
         element.button.resetKey.addEventListener("click", () => resetKey(widgetService));

@@ -1,4 +1,5 @@
-import type { AxiosStatic } from "axios";
+import axios from "axios";
+import { create } from "jsondiffpatch";
 import { errorMessages } from "@/config/errorMessages";
 import { ENCODING } from "@/constants/encoding";
 import { ApiSignAdapter } from "./ApiSign/ApiSignAdapter";
@@ -40,7 +41,6 @@ export interface IEds {
 
 export class Eds implements IEds {
   readonly version = packageJson.version;
-
   private readonly store = new Store();
   private readonly optionsBuilder = new DefaultOptionsBuilder();
   private readonly optionsDirector = new OptionsBuildDirector(this.optionsBuilder);
@@ -52,7 +52,6 @@ export class Eds implements IEds {
   private readonly dataTypeValidator = new DataTypeValidator();
   private readonly objectFormatterBuilder = new FormattedObjectBuilder();
 
-  private axios?: AxiosStatic;
   private logger?: ILogger;
   private signService?: ISignService;
   private objectHandler?: IObjectHandler;
@@ -66,12 +65,9 @@ export class Eds implements IEds {
     }
 
     const options = this.setupOptions(userOptions);
-    const diffPatcher = await import(/* webpackChunkName: "diff_patcher" */ "jsondiffpatch");
-    const axios = await import(/* webpackChunkName: "axios_lib" */ "axios");
 
-    this.axios = axios.default;
     this.logger = new Logger(options.debug);
-    this.apiSignService = new ApiSignService(this.axios);
+    this.apiSignService = new ApiSignService(axios);
     this.signService = new SignService(this.store.widget, this.apiSignService, this.apiSignAdapter, this.base64);
     this.objectDecoder = new ObjectDecoder(this.base64, this.logger);
     this.formattedObjectDirector = new FormattedObjectDirector(
@@ -80,12 +76,12 @@ export class Eds implements IEds {
     );
     this.objectHandler = new ObjectHandler(
       this.signService,
-      this.axios,
+      axios,
       this.typeChecker,
       this.emptyChecker,
       this.formattedObjectDirector,
       this.objectDecoder,
-      diffPatcher.create(),
+      create(),
       this.logger
     );
   }

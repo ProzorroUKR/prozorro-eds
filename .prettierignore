@@ -5,3 +5,7 @@ coverage
 dist
 dist/*
 node_modules
+public
+public/*
+src/vendors
+src/vendors/*
