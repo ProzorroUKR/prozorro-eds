@@ -1,7 +1,7 @@
 {
   "name": "@prozorro/prozorro-eds",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "Wrapper over IIT library (Diia.Sign)",
   "author": "Dmytro Rybachek",
   "license": "MIT",
