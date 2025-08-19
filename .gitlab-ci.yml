@@ -196,11 +196,9 @@ Deploy staging kube:
   image: docker-registry.prozorro.gov.ua/web-projects/docker-images/node:22.11.0-alpine
   before_script:
     - >
-      if [[ -z "$IS_PROD" ]] ; then
-        VAULT_TOKEN=$(curl -s --request POST \
-        --data '{"role": "client-services", "jwt": "'"$ID_VAULT"'"}' \
-        $VAULT_ADDR/v1/auth/jwt/login | jq '.auth.client_token' | tr -d '\"')
-      fi
+      VAULT_TOKEN=$(curl -s --request POST \
+      --data '{"role": "client-services", "jwt": "'"$ID_VAULT"'"}' \
+      $VAULT_ADDR/v1/auth/jwt/login | jq '.auth.client_token' | tr -d '\"')
     - >
       NPM_TOKEN=$(curl -s --header "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/prozorro-eds/data/npm-token | jq -r .data.data.token)
     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
@@ -232,7 +230,6 @@ publish_prod:
     VAULT_PATH: prozorro-eds/data/env_prod
     NPM_PUBLISH_PARAMS: "--access public"
     NPM_APP_VERSION: $CI_COMMIT_TAG
-    IS_PROD: 1
   rules:
     - if: $CI_COMMIT_TAG
       when: manual
