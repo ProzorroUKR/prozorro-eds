@@ -3,7 +3,7 @@
 #### Бібліотека електронного підпису для вебзастосунків Prozorro. Забезпечує:
 - ініціалізацію оточення підпису;
 - підпис та перевірку об’єктів із ЦБД;
-- підпис довільних даних або гешів;
+- підпис довільних даних;
 - роботу з віджетом (iframe) для накладання підпису користувачем.
 
 ## Встановлення
@@ -69,7 +69,9 @@ const widget = await ProzorroEds.loadWidget();
 await widget.resetKey();
 ```
 
-> Для завантаження віджета домен вебзастосунку має бути доданий у список дозволених (інакше користувач побачить “Доступ заборонено”). В тестовому середовищі історично дозволені `localhost` та `sign-widget-test.eu.iit.com.ua`. На сторінці має бути контейнер для iframe, напр.:  
+> Для завантаження віджета домен вебзастосунку має бути доданий у список дозволених (інакше користувач побачить “Доступ заборонено”). 
+> В тестовому середовищі історично дозволені `localhost` та `sign-widget-test.eu.iit.com.ua`. 
+> На сторінці має бути контейнер для iframe, напр.:  
 > `<div id="sign-widget-parent" style="width: 580px; height: 420px"></div>`.
 
 ---
@@ -107,10 +109,7 @@ const widget = await ProzorroEds.loadWidget(): Promise<WidgetUserServiceInterfac
 // 1) Підпис довільних даних
 await ProzorroEds.sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>
 
-// 2) Підпис гешу
-await ProzorroEds.signHash(hash: string, options?: UserSignOptionsType): Promise<Uint8Array | string>
-
-// 3) Підпис об’єктів із ЦБД
+// 2) Підпис об’єктів із ЦБД
 await ProzorroEds.signObjects(links: string[], options?: UserSignOptionsType): Promise<SignedObjectType[]>
 ```
 
