@@ -195,7 +195,7 @@ Deploy staging kube:
     NPM_APP_VERSION: $CI_COMMIT_TAG
   image: docker-registry.prozorro.gov.ua/web-projects/docker-images/node:22.11.0-alpine
   before_script:
-    - >
+    - |
       VAULT_TOKEN=$(curl -s --request POST \
       --data '{"role": "client-services", "jwt": "'"$ID_VAULT"'"}' \
       $VAULT_ADDR/v1/auth/jwt/login | jq '.auth.client_token' | tr -d '\"')
