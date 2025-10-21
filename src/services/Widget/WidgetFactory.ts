@@ -1,20 +1,15 @@
-import { errorMessages } from "@/config/errorMessages";
 import { WIDGET } from "@/config/widget";
 import { Assert } from "@/utils/Assert";
-import type { EndUser } from "@/types/IIT/Widget/LibraryInterface";
+import { EndUser, FORM_TYPE } from "@/vendors/eusign";
+import { errorMessages } from "@/config/errorMessages";
 
 export interface IWidgetFactory {
-  create(): Promise<EndUser.Instance>;
+  create(): Promise<EndUser>;
 }
 
 export class WidgetFactory implements IWidgetFactory {
-  async create(): Promise<EndUser.Instance> {
-    const widget = new (window as any).EndUser(
-      WIDGET.ID.PARENT,
-      WIDGET.ID.MAIN,
-      WIDGET.PATH,
-      (window as any).EndUser.FormType.ReadPKey
-    );
+  async create(): Promise<EndUser> {
+    const widget = new EndUser(WIDGET.ID.PARENT, WIDGET.ID.MAIN, WIDGET.PATH, FORM_TYPE.ReadPKey);
     await this.load();
     return widget;
   }

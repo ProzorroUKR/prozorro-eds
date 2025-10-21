@@ -8,6 +8,7 @@ import type { IBase64 } from "@/utils/Base64";
 import type { IWidgetEndUser } from "@/store/modules/WidgetEndUser";
 import type { IApiSignAdapter } from "@/services/ApiSign/ApiSignAdapter";
 import type { IApiSignService } from "@/services/ApiSign/ApiSignService";
+import { SIGN_TYPE, SIGN_ALGO } from "@/vendors/eusign";
 
 export interface ISignService {
   sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
@@ -29,9 +30,9 @@ export class SignService implements ISignService {
       const options = {
         external: Boolean(userOptions.external),
         asBase64String: Boolean(userOptions.asBase64String),
-        signAlgorithm: (window as any).EndUser.SignAlgo.DSTU4145WithGOST34311,
+        signAlgorithm: SIGN_ALGO.DSTU4145WithGOST34311,
         previousSign: userOptions.previousSign || null,
-        signType: (window as any).EndUser.SignType.CAdES_X_Long,
+        signType: SIGN_TYPE.CAdES_X_Long,
       };
 
       return (await this.widget.endUser.SignData(

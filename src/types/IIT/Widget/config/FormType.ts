@@ -29,4 +29,6 @@ export type FormType = {
    * зчитаного ос. ключа. Самодостатня форма.
    */
   ViewPKeyCertificates: number;
+
+  MakeDeviceCertificate: number;
 };

@@ -1,35 +1,34 @@
 import axios from "axios";
 import { create } from "jsondiffpatch";
-import { errorMessages } from "@/config/errorMessages";
-import { ENCODING } from "@/constants/encoding";
-import { ApiSignAdapter } from "./ApiSign/ApiSignAdapter";
-import { ApiSignService, type IApiSignService } from "./ApiSign/ApiSignService";
-import type { ILogger } from "@/utils/Logger";
-import { type IObjectDecoder, ObjectDecoder } from "./ObjectDecoder";
-import { type IObjectHandler, ObjectHandler } from "./ObjectHandler";
-import { type ISignService, SignService } from "./SignService";
-import { WidgetFactory } from "./Widget/WidgetFactory";
-import { WidgetService } from "./Widget/WidgetService";
-import { type IWidgetUserService, WidgetUserService } from "./Widget/WidgetUserService";
+import packageJson from "@@/package.json";
 import { Store } from "@/store";
-import type { DefaultOptionsType } from "@/types/DefaultOptionsType";
-import type { SignType } from "@/types/sign/SignType";
-import type { UserOptionsType } from "@/types/UserOptionsType";
-import type { UserSignOptionsType } from "@/types/UserSignOptionsType";
-import type { VerifyObjectResponseType } from "@/types/VerifyObjectResponseType";
 import { Assert } from "@/utils/Assert";
 import { Base64 } from "@/utils/Base64";
+import { Logger } from "@/utils/Logger";
+import type { ILogger } from "@/utils/Logger";
+import { ENCODING } from "@/constants/encoding";
+import type { SignType } from "@/types/sign/SignType";
+import { errorMessages } from "@/config/errorMessages";
+import { WidgetService } from "./Widget/WidgetService";
+import { WidgetFactory } from "./Widget/WidgetFactory";
+import { ApiSignAdapter } from "./ApiSign/ApiSignAdapter";
 import { TypeChecker } from "@/utils/checker/TypeChecker";
 import { EmptyChecker } from "@/utils/checker/EmptyChecker";
-import { Logger } from "@/utils/Logger";
-import { DefaultOptionsBuilder } from "./OptionsBuilder/DefaultOptionsBuilder";
-import { OptionsBuildDirector } from "./OptionsBuilder/OptionsBuildDirector";
-import { DataTypeValidator } from "./DataTypeValidator/DataTypeValidator";
+import { type ISignService, SignService } from "./SignService";
+import type { UserOptionsType } from "@/types/UserOptionsType";
+import { type IObjectDecoder, ObjectDecoder } from "./ObjectDecoder";
+import { type IObjectHandler, ObjectHandler } from "./ObjectHandler";
+import type { DefaultOptionsType } from "@/types/DefaultOptionsType";
 import { ValidationTypes } from "./DataTypeValidator/ValidationTypes";
+import type { UserSignOptionsType } from "@/types/UserSignOptionsType";
+import { DataTypeValidator } from "./DataTypeValidator/DataTypeValidator";
+import { OptionsBuildDirector } from "./OptionsBuilder/OptionsBuildDirector";
+import { DefaultOptionsBuilder } from "./OptionsBuilder/DefaultOptionsBuilder";
+import { ApiSignService, type IApiSignService } from "./ApiSign/ApiSignService";
+import type { VerifyObjectResponseType } from "@/types/VerifyObjectResponseType";
 import { FormattedObjectBuilder } from "./ObjectFormatter/FormattedObjectBuilder";
+import { type IWidgetUserService, WidgetUserService } from "./Widget/WidgetUserService";
 import { FormattedObjectDirector, type IFormattedObjectDirector } from "./ObjectFormatter/FormattedObjectDirector";
-import { ScriptReceiver } from "@/services/Dom/ScriptReceiver";
-import packageJson from "@@/package.json";
 
 export interface IEds {
   init(options?: UserOptionsType): Promise<void>;
@@ -47,7 +46,6 @@ export class Eds implements IEds {
   private readonly typeChecker = new TypeChecker();
   private readonly emptyChecker = new EmptyChecker();
   private readonly base64 = new Base64();
-  private readonly scriptReceiver = new ScriptReceiver();
   private readonly apiSignAdapter = new ApiSignAdapter();
   private readonly dataTypeValidator = new DataTypeValidator();
   private readonly objectFormatterBuilder = new FormattedObjectBuilder();
@@ -87,8 +85,6 @@ export class Eds implements IEds {
   }
 
   async loadWidget(): Promise<IWidgetUserService> {
-    await this.scriptReceiver.insert("/libs/eusign.js");
-
     const widgetFactory = new WidgetFactory();
     const widget = await widgetFactory.create();
     const widgetService = new WidgetService(widget, this.store.userOptions.callbackAfterAuth);

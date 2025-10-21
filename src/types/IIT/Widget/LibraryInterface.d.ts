@@ -1,41 +1,8 @@
-import { ConstantsInterface } from "@/types/IIT/Widget/ConstantsInterface";
-import type { CCSType } from "@/types/IIT/Widget/config/CCSType.ts";
-import type { EventType } from "@/types/IIT/Widget/config/EventType.ts";
-import type { RevocationReason } from "@/types/IIT/Widget/config/RevocationReason.ts";
+import type { ConstantsInterface } from "@/types/IIT/Widget/ConstantsInterface";
+import type { CertificateType } from "@/types/IIT/Widget/CertificateType";
 
 declare namespace EndUser {
   interface Instance extends ConstantsInterface {
-    /**
-     * Конструктор для створення об'єкту для взаємодії з iframe SignWidget
-     */
-    new (
-      /**
-       * Ідентифікатор батківського елементу для відображення iframe,
-       * який завантажує сторінку SignWidget
-       */
-      parentId: string,
-
-      /**
-       * Ідентифікатор iframe, який завантажує сторінку SignWidget
-       */
-      id: string,
-
-      /**
-       * URI з адресою за якою розташована сторінка SignWidget
-       */
-      src: string,
-
-      /**
-       * Тип форми для відображення (див. константи EndUser.FormType)
-       */
-      formType?: number,
-
-      /**
-       * Параметри форми для відображення (див. EndUser.FormParams)
-       */
-      formParams?: any // todo describe
-    ): this;
-
     /**
      * Реєстрація обробника для отримання сповіщення про події від віджету підпису
      */
@@ -43,13 +10,13 @@ declare namespace EndUser {
       /**
        * Тип події
        */
-      eventType: EventType,
+      eventType: number,
 
       /**
        * Функція-обробник подій
        */
-      listener: (eventType: EventType) => void
-    ): Promise<void[]>;
+      listener: (eventType: any) => void
+    ): Promise<void>;
 
     /**
      * Зчитування ос. ключа користувача. Функція повинна викликатися до
@@ -57,12 +24,12 @@ declare namespace EndUser {
      * Проміс буде виконано, коли користувач зчитає ос. ключ.
      * Якщо ос. ключ вже зчитано проміс виконується відразу.
      */
-    ReadPrivateKey(): Promise<import("./CertificateType").CertificateType[]>;
+    ReadPrivateKey(): Promise<CertificateType[]>;
 
     /**
      * Стирання зчитаного ос. ключа користувача
      */
-    ResetPrivateKey(): Promise<void[]>;
+    ResetPrivateKey(): Promise<void>;
 
     /**
      * Формування нового сертифікату для діючого ключа. Діючий ключ попередньо
@@ -100,14 +67,14 @@ declare namespace EndUser {
        * Тип запиту для зміни статусу власного
        * сертифіката користувача
        */
-      ccsType: CCSType,
+      ccsType: number,
 
       /**
        * Причина відкликання власного сертифіката користувача.
        * При блокуванні сертифікату передається значення
        * EndUser.RevocationReason.Unknown
        */
-      revocationReason: RevocationReason
+      revocationReason: number
     ): Promise<void>;
 
     /**
@@ -145,7 +112,7 @@ declare namespace EndUser {
        * якщо алгоритми підписів (signAlgo) співпадають, та попередній підпис
        * не містить підписувача. Опціональний параметр. За замовчанням - null.
        */
-      previousSign: Uint8Array | string | Array<Uint8Array | string> | null
+      previousSign?: Uint8Array | string | Array<Uint8Array | string> | null
     ): Promise<Uint8Array | string | Array<Uint8Array | string>>;
 
     /**
@@ -186,13 +153,13 @@ declare namespace EndUser {
        * не містить підписувача. Опціональний параметр. За замовчанням - null.
        * Для внутрішнього підпису (external = false) параметр data не використовується.
        */
-      previousSign: Uint8Array | string | Array<Uint8Array | string> | null,
+      previousSign?: Uint8Array | string | Array<Uint8Array | string> | null,
 
       /**
        * Тип підпису. Можливі значення визначені в
        * EndUser.SignType. За замовчанням - EndUser.SignType.CAdES_BES.
        */
-      signType: number
+      signType?: number
     ): Promise<Uint8Array | string | Array<Uint8Array | string>>;
 
     /**

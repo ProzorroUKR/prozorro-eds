@@ -184,6 +184,12 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
 
 ---
 
+## Release notes
+
+- **21.10.2025** - refactor eusign.js dependency   
+
+---
+
 ### Ліцензія
 
 © Prozorro. Усі права захищені.
