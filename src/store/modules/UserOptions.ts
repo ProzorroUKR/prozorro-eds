@@ -1,31 +1,39 @@
-import type { UserOptionsType } from "@/types/UserOptionsType";
-import type { CertificateType } from "@/types/IIT/Widget/CertificateType";
+import { cloneDeep } from "lodash";
+import type { EdsInitializationConfigType } from "@/types/EdsInitializationConfigType.ts";
+import type { EnvironmentType } from "@/types/EnvironmentType";
+import { DEFAULT_APP_CONFIG } from "@/config/defaultApp.config";
 import type { DefaultOptionsType } from "@/types/DefaultOptionsType";
+import type { CertificateType } from "@/types/IIT/Widget/CertificateType";
+import { OptionsBuildDirector } from "@/services/OptionsBuilder/OptionsBuildDirector";
 
 export interface IUserOptions {
-  ignoreFields: string[];
   debug: boolean;
+  ignoreFields: string[];
+  envVars: EnvironmentType;
   callbackAfterAuth: (certificates: CertificateType[]) => void;
-  setOptions(options: DefaultOptionsType): void;
+  setOptions(options?: EdsInitializationConfigType): void;
 }
 
 export class UserOptions implements IUserOptions {
-  private options: UserOptionsType = {};
+  private _options: DefaultOptionsType = cloneDeep(DEFAULT_APP_CONFIG);
 
   get ignoreFields(): string[] {
-    return this.options.ignoreFields || [];
+    return this._options.ignoreFields;
   }
 
   get debug(): boolean {
-    return Boolean(this.options.debug);
+    return this._options.debug;
   }
 
   get callbackAfterAuth(): (certificates: CertificateType[]) => void {
-    const func = (): void => {};
-    return this.options.callbackAfterAuth || func;
+    return this._options.callbackAfterAuth;
   }
 
-  setOptions(options: DefaultOptionsType): void {
-    this.options = options;
+  get envVars(): EnvironmentType {
+    return this._options.environment;
+  }
+
+  setOptions(options?: EdsInitializationConfigType): void {
+    this._options = new OptionsBuildDirector().build(options);
   }
 }

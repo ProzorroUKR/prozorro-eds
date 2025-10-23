@@ -1,12 +1,22 @@
-import type { UserOptionsType } from "@/types/UserOptionsType";
-import type { OptionsBuilderInterface } from "./OptionsBuilderInterface";
+import type { EdsInitializationConfigType } from "@/types/EdsInitializationConfigType.ts";
+import { DefaultOptionsBuilder } from "@/services/OptionsBuilder/DefaultOptionsBuilder";
+import type { DefaultOptionsType } from "@/types/DefaultOptionsType";
 
 export class OptionsBuildDirector {
-  constructor(private readonly builder: OptionsBuilderInterface) {}
+  private readonly builder = new DefaultOptionsBuilder();
 
-  public buildDefaultOptions(options: UserOptionsType): void {
-    this.builder.buildIgnoreFields(options.ignoreFields);
-    this.builder.buildDebug(Boolean(options.debug));
-    this.builder.buildCallbackAfterAuth(options.callbackAfterAuth);
+  public build({
+    ignoreFields,
+    callbackAfterAuth,
+    debug,
+    environment,
+  }: EdsInitializationConfigType = {}): DefaultOptionsType {
+    return this.builder
+      .reset()
+      .setIgnoreFields(ignoreFields)
+      .setDebugMode(debug)
+      .setCbAfterAuth(callbackAfterAuth)
+      .setEnvVars(environment)
+      .getOptions();
   }
 }

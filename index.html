@@ -536,7 +536,7 @@
         try {
           const response = await fetch(element.textarea.url.value);
           const { data } = await response.json();
-          const sign = await window.eds.sign(JSON.stringify(data));
+          const sign = await window.ProzorroEds.sign(JSON.stringify(data));
 
           log(sign);
           signed.objects = sign;
@@ -553,7 +553,7 @@
        */
       async function signData() {
         try {
-          const sign = await window.eds.sign(element.textarea.data.value);
+          const sign = await window.ProzorroEds.sign(element.textarea.data.value);
 
           log(sign);
           signed.data = sign;
@@ -571,7 +571,7 @@
        */
       async function addSignToData() {
         try {
-          const sign = await window.eds.sign(signed.data);
+          const sign = await window.ProzorroEds.sign(signed.data);
 
           log(sign);
           signed.data = sign;
@@ -591,7 +591,7 @@
 
           reader.onloadend = async () => {
             const file = reader.result.replace(/^data:.+;base64,/, "");
-            const sign = await window.eds.sign(file);
+            const sign = await window.ProzorroEds.sign(file);
             log(sign);
             signed.file = sign;
 
@@ -612,7 +612,7 @@
        */
       async function addSignToFile() {
         try {
-          const sign = await window.eds.sign(signed.file);
+          const sign = await window.ProzorroEds.sign(signed.file);
           log(sign);
           signed.file = sign;
         } catch (e) {
@@ -692,7 +692,7 @@
        */
       async function verifyLinks() {
         try {
-          const verifiedObjects = await window.eds.verifyObjects([element.textarea.url.value]);
+          const verifiedObjects = await window.ProzorroEds.verifyObjects([element.textarea.url.value]);
 
           if (!verifiedObjects.length) {
             alert("Error");
@@ -743,7 +743,7 @@
 
           reader.onloadend = async () => {
             const file = reader.result.replace(/^data:.+;base64,/, "");
-            const result = await window.eds.verify(file, "UTF-8");
+            const result = await window.ProzorroEds.verify(file, "UTF-8");
 
             showSigners(result.signers);
 
@@ -842,9 +842,7 @@
       element.button.signFile.addEventListener("click", event => btnActionWrapper(signFile, event));
       element.button.addSignToData.addEventListener("click", event => btnActionWrapper(addSignToData, event));
       element.button.addSignToFile.addEventListener("click", event => btnActionWrapper(addSignToFile, event));
-      element.button.downloadSignedObjects.addEventListener("click", event =>
-        btnActionWrapper(downloadSignedObjects, event)
-      );
+      element.button.downloadSignedObjects.addEventListener("click", event => btnActionWrapper(downloadSignedObjects, event));
       element.button.downloadSignedData.addEventListener("click", event => btnActionWrapper(downloadSignedData, event));
       element.button.downloadSignedFile.addEventListener("click", event => btnActionWrapper(downloadSignedFile, event));
 
@@ -857,15 +855,19 @@
       setInputValues();
 
       window.onload = async () => {
-        await window.eds.init({
-          debug: true,
-          debug: false,
-          callbackAfterAuth: certificates => {
+        await window.ProzorroEds.init({
+            debug: true,
+            environment: "development",
+            callbackAfterAuth: certificates => {
             showCertificates(certificates);
             setWidgetState(widgetState.end);
           },
         });
-        const widgetService = await window.eds.loadWidget();
+
+        const widgetService = await window.ProzorroEds.loadWidget({
+            parentId: "sign-widget-parent",
+            frameId: "sign-widget",
+        });
 
         element.button.resetKey.addEventListener("click", () => resetKey(widgetService));
 

@@ -1,5 +1,5 @@
-import type { AxiosStatic } from "axios";
-import { DiffPatcher } from "jsondiffpatch";
+import axios from "axios";
+import { DiffPatcher, create } from "jsondiffpatch";
 import { DOCUMENTS_SIGN } from "@/config/compareSign";
 import { errorMessages } from "@/config/errorMessages";
 import { EdsError } from "@/services/Error/EdsError";
@@ -8,8 +8,8 @@ import type { DocumentType } from "@/types/DocumentType";
 import type { VerifyDocumentType } from "@/types/VerifyDocumentType";
 import type { VerifyObjectResponseType } from "@/types/VerifyObjectResponseType";
 import { BlobHandler } from "@/utils/BlobHandler";
-import type { IEmptyChecker } from "@/utils/checker/EmptyChecker";
-import type { ITypeChecker } from "@/utils/checker/TypeChecker";
+import { EmptyChecker } from "@/utils/checker/EmptyChecker";
+import { TypeChecker } from "@/utils/checker/TypeChecker";
 import type { ILogger } from "@/utils/Logger";
 import type { ISignService } from "@/services/SignService";
 import type { IFormattedObjectDirector } from "@/services/ObjectFormatter/FormattedObjectDirector";
@@ -22,14 +22,14 @@ export interface IObjectHandler {
 }
 
 export class ObjectHandler implements IObjectHandler {
+  private readonly diffPatcher: DiffPatcher = create();
+  private readonly typeChecker = new TypeChecker();
+  private readonly emptyChecker = new EmptyChecker();
+
   constructor(
     private readonly signService: ISignService,
-    private readonly axios: AxiosStatic,
-    private readonly typeChecker: ITypeChecker,
-    private readonly emptyChecker: IEmptyChecker,
     private readonly objectFormatter: IFormattedObjectDirector,
     private readonly objectDecoder: IObjectDecoder,
-    private readonly diffPatcher: DiffPatcher,
     private readonly logger: ILogger
   ) {}
 
@@ -46,7 +46,7 @@ export class ObjectHandler implements IObjectHandler {
     return Promise.all(
       signsList.map(async ({ id, document }: VerifyDocumentType) => {
         const object = objects.find((obj: Record<any, any>) => obj.id === id) || {};
-        const response = await this.axios.get(document.url, { responseType: "blob" });
+        const response = await axios.get(document.url, { responseType: "blob" });
         const signEncoded = await BlobHandler.toBase64(response.data);
         const signPrepared = await this.signService.verify(signEncoded);
         const signData = this.objectDecoder.decode(signPrepared.data);
@@ -101,7 +101,7 @@ export class ObjectHandler implements IObjectHandler {
   }
 
   private async getObject(url: string): Promise<Record<any, any>> {
-    const result = await this.axios.get(url);
+    const result = await axios.get(url);
     const { data } = result.data;
     return data;
   }

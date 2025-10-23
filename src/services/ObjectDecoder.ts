@@ -2,17 +2,16 @@ import { errorMessages } from "@/config/errorMessages";
 import { ENCODING } from "@/constants/encoding";
 import type { ILogger } from "@/utils/Logger";
 import { EdsError } from "@/services/Error/EdsError";
-import type { IBase64 } from "@/utils/Base64";
+import { Base64 } from "@/utils/Base64";
 
 export interface IObjectDecoder {
   decode(data: string): Record<any, any>;
 }
 
 export class ObjectDecoder implements IObjectDecoder {
-  constructor(
-    private readonly base64: IBase64,
-    private readonly logger: ILogger
-  ) {}
+  private readonly base64 = new Base64();
+
+  constructor(private readonly logger: ILogger) {}
 
   decode(data: string): Record<any, any> {
     let dataDecoded = this.base64.decode(data, ENCODING.UTF_8);

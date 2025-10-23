@@ -3,8 +3,8 @@ import type { ErrorMessageType } from "@/types/ErrorMessageType";
 import { EmptyChecker } from "@/utils/checker/EmptyChecker";
 import { TypeCheckFactory } from "@/services/DataTypeValidator/TypeCheckFactory";
 import { typeCheckStrategyMap } from "@/services/DataTypeValidator/TypeCheckStrategyMap";
-import { AssertionError } from "@/services/Error/AssertionError";
 import { errorMessages } from "@/config/errorMessages";
+import { EdsError } from "@/services/Error/EdsError";
 
 export interface IDataTypeValidator {
   validate(data: any, typesList: string[] | string, error?: ErrorMessageType): void;
@@ -23,7 +23,7 @@ export class DataTypeValidator implements IDataTypeValidator {
     const valid = (typesList as string[]).some((type: string) => this.checkType(data, type));
 
     if (!valid) {
-      throw new AssertionError(error || errorMessages.incorrectInputFormat);
+      throw new EdsError(error || errorMessages.incorrectInputFormat);
     }
   }
 
