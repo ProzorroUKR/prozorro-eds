@@ -15,7 +15,7 @@ export * from "@/types/sign/TimeType";
 const ProzorroEds = new Eds();
 
 if (typeof window !== "undefined") {
-  (window as any).eds = ProzorroEds;
+  (window as any).ProzorroEds = ProzorroEds;
 }
 
 export { ProzorroEds };

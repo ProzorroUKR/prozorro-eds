@@ -1,9 +1,6 @@
-import axios from "axios";
-import { create } from "jsondiffpatch";
 import packageJson from "@@/package.json";
 import { Store } from "@/store";
 import { Assert } from "@/utils/Assert";
-import { Base64 } from "@/utils/Base64";
 import { Logger } from "@/utils/Logger";
 import type { ILogger } from "@/utils/Logger";
 import { ENCODING } from "@/constants/encoding";
@@ -11,28 +8,21 @@ import type { SignType } from "@/types/sign/SignType";
 import { errorMessages } from "@/config/errorMessages";
 import { WidgetService } from "./Widget/WidgetService";
 import { WidgetFactory } from "./Widget/WidgetFactory";
-import { ApiSignAdapter } from "./ApiSign/ApiSignAdapter";
-import { TypeChecker } from "@/utils/checker/TypeChecker";
-import { EmptyChecker } from "@/utils/checker/EmptyChecker";
 import { type ISignService, SignService } from "./SignService";
-import type { UserOptionsType } from "@/types/UserOptionsType";
 import { type IObjectDecoder, ObjectDecoder } from "./ObjectDecoder";
 import { type IObjectHandler, ObjectHandler } from "./ObjectHandler";
-import type { DefaultOptionsType } from "@/types/DefaultOptionsType";
 import { ValidationTypes } from "./DataTypeValidator/ValidationTypes";
+import type { EdsWidgetConfigType } from "@/types/EdsWidgetConfigType";
 import type { UserSignOptionsType } from "@/types/UserSignOptionsType";
 import { DataTypeValidator } from "./DataTypeValidator/DataTypeValidator";
-import { OptionsBuildDirector } from "./OptionsBuilder/OptionsBuildDirector";
-import { DefaultOptionsBuilder } from "./OptionsBuilder/DefaultOptionsBuilder";
-import { ApiSignService, type IApiSignService } from "./ApiSign/ApiSignService";
 import type { VerifyObjectResponseType } from "@/types/VerifyObjectResponseType";
-import { FormattedObjectBuilder } from "./ObjectFormatter/FormattedObjectBuilder";
+import type { EdsInitializationConfigType } from "@/types/EdsInitializationConfigType";
 import { type IWidgetUserService, WidgetUserService } from "./Widget/WidgetUserService";
 import { FormattedObjectDirector, type IFormattedObjectDirector } from "./ObjectFormatter/FormattedObjectDirector";
 
 export interface IEds {
-  init(options?: UserOptionsType): Promise<void>;
-  loadWidget(): Promise<IWidgetUserService>;
+  init(options?: EdsInitializationConfigType): Promise<void>;
+  loadWidget(config: EdsWidgetConfigType): Promise<IWidgetUserService>;
   sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
   verify(sign: string, encoding?: ENCODING): Promise<SignType>;
   formatObject(data: Record<any, any>): Record<any, any>;
@@ -41,51 +31,33 @@ export interface IEds {
 export class Eds implements IEds {
   readonly version = packageJson.version;
   private readonly store = new Store();
-  private readonly optionsBuilder = new DefaultOptionsBuilder();
-  private readonly optionsDirector = new OptionsBuildDirector(this.optionsBuilder);
-  private readonly typeChecker = new TypeChecker();
-  private readonly emptyChecker = new EmptyChecker();
-  private readonly base64 = new Base64();
-  private readonly apiSignAdapter = new ApiSignAdapter();
   private readonly dataTypeValidator = new DataTypeValidator();
-  private readonly objectFormatterBuilder = new FormattedObjectBuilder();
 
   private logger?: ILogger;
   private signService?: ISignService;
   private objectHandler?: IObjectHandler;
   private objectDecoder?: IObjectDecoder;
-  private apiSignService?: IApiSignService;
   private formattedObjectDirector?: IFormattedObjectDirector;
 
-  async init(userOptions?: UserOptionsType): Promise<void> {
-    if (!this.typeChecker.isUndefined(userOptions)) {
-      this.dataTypeValidator.validate(userOptions, ValidationTypes.OBJECT);
-    }
-
-    const options = this.setupOptions(userOptions);
-
-    this.logger = new Logger(options.debug);
-    this.apiSignService = new ApiSignService(axios);
-    this.signService = new SignService(this.store.widget, this.apiSignService, this.apiSignAdapter, this.base64);
-    this.objectDecoder = new ObjectDecoder(this.base64, this.logger);
-    this.formattedObjectDirector = new FormattedObjectDirector(
-      this.objectFormatterBuilder,
-      this.store.userOptions.ignoreFields
-    );
+  async init(userOptions?: EdsInitializationConfigType): Promise<void> {
+    this.store.userOptions.setOptions(userOptions);
+    this.logger = new Logger(this.store.userOptions.debug);
+    this.signService = new SignService(this.store);
+    this.objectDecoder = new ObjectDecoder(this.logger);
+    this.formattedObjectDirector = new FormattedObjectDirector(this.store.userOptions.ignoreFields);
     this.objectHandler = new ObjectHandler(
       this.signService,
-      axios,
-      this.typeChecker,
-      this.emptyChecker,
       this.formattedObjectDirector,
       this.objectDecoder,
-      create(),
       this.logger
     );
   }
 
-  async loadWidget(): Promise<IWidgetUserService> {
-    const widgetFactory = new WidgetFactory();
+  async loadWidget(config: EdsWidgetConfigType): Promise<IWidgetUserService> {
+    Assert.isDefined(config?.parentId, errorMessages.incorrectWidgetParentIdParam);
+    Assert.isDefined(config?.frameId, errorMessages.incorrectWidgetIdParam);
+
+    const widgetFactory = new WidgetFactory(config.parentId, config.frameId, this.store.userOptions.envVars.widgetUrl);
     const widget = await widgetFactory.create();
     const widgetService = new WidgetService(widget, this.store.userOptions.callbackAfterAuth);
 
@@ -121,16 +93,5 @@ export class Eds implements IEds {
     Assert.isDefined(this.formattedObjectDirector, errorMessages.libraryInit);
 
     return this.formattedObjectDirector.build(data);
-  }
-
-  private setupOptions(options?: UserOptionsType): DefaultOptionsType {
-    if (options === undefined) {
-      return this.store.userOptions;
-    }
-
-    this.optionsDirector.buildDefaultOptions(options);
-    const localData = this.optionsBuilder.getOptions();
-    this.store.userOptions.setOptions(localData);
-    return this.store.userOptions;
   }
 }

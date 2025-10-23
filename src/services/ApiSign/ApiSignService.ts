@@ -1,31 +1,31 @@
-import { AxiosError } from "axios";
-import type { AxiosResponse, AxiosStatic } from "axios";
+import axios, { AxiosError } from "axios";
+import type { AxiosResponse } from "axios";
 import { errorMessages } from "@/config/errorMessages";
 import { STRING } from "@/constants/string";
 import { EdsError } from "@/services/Error/EdsError";
 import type { ApiSignDecryptResponseType } from "@/types/http/ApiSignDecryptResponseType";
 import { API_SIGN_METHODS } from "@/constants/apiSignMethods";
-import { API_SIGN_LOGIN, PATH_API_SIGN, API_SIGN_PASSWORD } from "@/constants/env";
+import type { EnvironmentType } from "@/types/EnvironmentType.ts";
 
 export interface IApiSignService {
   decrypt(sign: string): Promise<ApiSignDecryptResponseType>;
 }
 
 export class ApiSignService implements IApiSignService {
-  constructor(private readonly axios: AxiosStatic) {}
+  constructor(private readonly envVars: EnvironmentType) {}
 
   async decrypt(sign: string): Promise<ApiSignDecryptResponseType> {
-    const apiUrl = `${PATH_API_SIGN}${API_SIGN_METHODS.DECRYPT}`;
+    const apiUrl = `${this.envVars.apiSign.url}${API_SIGN_METHODS.DECRYPT}`;
     let response: AxiosResponse<ApiSignDecryptResponseType>;
 
     try {
-      response = await this.axios.post(
+      response = await axios.post(
         apiUrl,
         { sign },
         {
           auth: {
-            username: API_SIGN_LOGIN,
-            password: API_SIGN_PASSWORD,
+            username: this.envVars.apiSign.login,
+            password: this.envVars.apiSign.pass,
           },
         }
       );

@@ -4,10 +4,10 @@ import { EdsError } from "@/services/Error/EdsError";
 import type { SignType } from "@/types/sign/SignType";
 import type { UserSignOptionsType } from "@/types/UserSignOptionsType";
 import { Assert } from "@/utils/Assert";
-import type { IBase64 } from "@/utils/Base64";
-import type { IWidgetEndUser } from "@/store/modules/WidgetEndUser";
-import type { IApiSignAdapter } from "@/services/ApiSign/ApiSignAdapter";
-import type { IApiSignService } from "@/services/ApiSign/ApiSignService";
+import { Base64 } from "@/utils/Base64";
+import type { IStore } from "@/store";
+import { ApiSignAdapter } from "@/services/ApiSign/ApiSignAdapter";
+import { ApiSignService, type IApiSignService } from "@/services/ApiSign/ApiSignService";
 import { SIGN_TYPE, SIGN_ALGO } from "@/vendors/eusign";
 
 export interface ISignService {
@@ -16,15 +16,16 @@ export interface ISignService {
 }
 
 export class SignService implements ISignService {
-  constructor(
-    private readonly widget: IWidgetEndUser,
-    private readonly apiSignService: IApiSignService,
-    private readonly apiSignAdapter: IApiSignAdapter,
-    private readonly base64: IBase64
-  ) {}
+  private readonly base64 = new Base64();
+  private readonly apiSignService: IApiSignService;
+  private readonly apiSignAdapter = new ApiSignAdapter();
+
+  constructor(private readonly store: IStore) {
+    this.apiSignService = new ApiSignService(store.userOptions.envVars);
+  }
 
   async sign(data: Uint8Array | string, userOptions: UserSignOptionsType = {}): Promise<Uint8Array | string> {
-    Assert.isDefined(this.widget.endUser, errorMessages.widgetInit);
+    Assert.isDefined(this.store.widget.endUser, errorMessages.widgetInit);
 
     try {
       const options = {
@@ -35,7 +36,7 @@ export class SignService implements ISignService {
         signType: SIGN_TYPE.CAdES_X_Long,
       };
 
-      return (await this.widget.endUser.SignData(
+      return (await this.store.widget.endUser.SignData(
         data,
         options.external,
         options.asBase64String,

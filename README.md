@@ -84,7 +84,7 @@ prozorro-eds.d.ts; реальні типи доступні з пакета.
 ### Ініціалізація
 
 ```ts
-await ProzorroEds.init(options?: UserOptionsType): Promise<void>
+await ProzorroEds.init(options?: EdsInitializationConfigType): Promise<void>
 ```
 
 - Має бути викликаний **перед** будь-якими іншими операціями (підпис/перевірка/віджет).  
@@ -141,10 +141,14 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
 
 ## Типи
 
-### `UserOptionsType`
+### `EdsInitializationConfigType`
 - `ignoreFields?: string[]`
 - `callbackAfterAuth?: (CertificateType[]) => void`
 - `debug?: boolean`
+- `environment?: "production" | "development"`
+### `EdsWidgetConfigType`
+- `parentId: string;` - Ідентифікатор братківського елементу для відображення iframe, який завантажує сторінку SignWidget
+- `frameId: string;` - Ідентифікатор iframe, який завантажує сторінку SignWidget
 
 ### `UserSignOptionsType`
 - `asBase64String?: boolean`
@@ -184,9 +188,18 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
 
 ---
 
-## Release notes
+## Release notes 
 
-- **21.10.2025** - refactor eusign.js dependency   
+- **21.10.2025** 
+  - Refactored eusign.js dependency;
+- **23.10.2025** 
+  - Removed environment dependency from `-beta` library tag;
+  - Renamed the `UserOptionsType` type to `EdsInitializationConfigType`;
+  - Extended the `EdsInitializationConfigType` type, added `environment` field;
+  - Added the `EdsWidgetConfigType` type for `loadWidget`;
+  - Renamed `window.eds` to `window.ProzorroEds`;
+  - Updated the validation messages;
+  - Deleted the Sentry service;
 
 ---
 
