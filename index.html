@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="ua">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="https://prozorro.gov.ua/favicon.ico" />
+    <title>EDS | Prozorro | Testing Page</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/jsondiffpatch@0.5.0/dist/formatters-styles/html.css" rel="stylesheet" />
+
+    <style>
+      .widget-disabled {
+        position: relative;
+      }
+
+      .widget-disabled::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar bg-light border-bottom border-body bg-gradient">
+      <div class="container">
+        <div class="row w-100 align-items-center">
+          <div class="col col-2 col-xl-2 p-2">
+            <span class="navbar-brand">
+              <img src="/prozorro_logo.png" alt="Prozorro" width="160px" height="100%" />
+            </span>
+          </div>
+
+          <div class="col col-12 col-xl-2 p-2 d-none d-xl-block offset-xl-8">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="layoutSwitchSimple" />
+              <label class="form-check-label" for="layoutSwitchSimple">Vertical layout</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid my-3">
+      <div class="row" id="layoutRow">
+        <div class="col col-12 col-xl-6">
+          <div class="accordion p-3" id="accordionList">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseOne"
+                  aria-expanded="true"
+                  aria-controls="collapseOne"
+                >
+                  Об'єкт ЦБД
+                </button>
+              </h2>
+
+              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionList">
+                <div class="accordion-body">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">URL</span>
+                    <textarea
+                      id="inputUrl"
+                      rows="1"
+                      data-store-key="url"
+                      class="form-control"
+                      aria-label="Object URL"
+                    ></textarea>
+                  </div>
+
+                  <p class="card-text mt-3">
+                    <span class="btn-group" role="group" aria-label="Navigation">
+                      <button type="button" class="btn btn-primary" id="buttonVerifyUrl">Перевірити</button>
+                      <button type="button" class="btn btn-primary" id="buttonSignUrl" disabled>Підписати</button>
+                      <button type="button" class="btn btn-primary" id="buttonDownloadSignedObjects" disabled>
+                        Завантажити
+                      </button>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseFree"
+                  aria-expanded="true"
+                  aria-controls="collapseFree"
+                >
+                  Підпис довільних даних
+                </button>
+              </h2>
+
+              <div id="collapseFree" class="accordion-collapse collapse" data-bs-parent="#accordionList">
+                <div class="accordion-body">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Дані</span>
+                    <textarea
+                      rows="1"
+                      id="dataForSign"
+                      data-store-key="dataForSign"
+                      class="form-control"
+                      aria-label="Various data"
+                    ></textarea>
+                  </div>
+
+                  <p class="card-text mt-3">
+                    <span class="btn-group" role="group" aria-label="Navigation">
+                      <button type="button" class="btn btn-primary" id="buttonSignData" disabled>Підписати</button>
+                      <button type="button" class="btn btn-primary" id="buttonAddSignToData" disabled>
+                        Додати підпис
+                      </button>
+                      <button type="button" class="btn btn-primary" id="buttonDownloadSignedData" disabled>
+                        Завантажити
+                      </button>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseFile"
+                  aria-expanded="true"
+                  aria-controls="collapseFile"
+                >
+                  Підпис довільного файлу
+                </button>
+              </h2>
+
+              <div id="collapseFile" class="accordion-collapse collapse" data-bs-parent="#accordionList">
+                <div class="accordion-body">
+                  <div class="input-group mb-3">
+                    <input class="form-control" type="file" id="fileForSign" />
+                  </div>
+
+                  <p class="card-text mt-3">
+                    <span class="btn-group" role="group" aria-label="Navigation">
+                      <button type="button" class="btn btn-primary" id="buttonSignFile" disabled>Підписати</button>
+                      <button type="button" class="btn btn-primary" id="buttonAddSignToFile" disabled>
+                        Додати підпис
+                      </button>
+                      <button type="button" class="btn btn-primary" id="buttonDownloadSignedFile" disabled>
+                        Завантажити
+                      </button>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseVerify"
+                  aria-expanded="true"
+                  aria-controls="collapseVerify"
+                >
+                  Перевірка файлу з підписом
+                </button>
+              </h2>
+
+              <div id="collapseVerify" class="accordion-collapse collapse" data-bs-parent="#accordionList">
+                <div class="accordion-body">
+                  <div class="input-group mb-3">
+                    <input class="form-control" type="file" id="fileSign" />
+                  </div>
+
+                  <p class="card-text mt-3">
+                    <span class="btn-group" role="group" aria-label="Navigation">
+                      <button type="button" class="btn btn-primary" id="buttonSignVerify">Перевірити</button>
+                    </span>
+                  </p>
+
+                  <p class="card-text">
+                    <small class="text-muted"> Дані розшифровуються у кодуванні <samp>UTF-8</samp> </small>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-12 col-xl-6">
+          <div class="p-3">
+            <div class="accordion" id="accordionWidget">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseWidget"
+                    aria-expanded="true"
+                    aria-controls="collapseWidget"
+                  >
+                    Віджет
+                  </button>
+                </h2>
+
+                <div id="collapseWidget" class="accordion-collapse collapse show" data-bs-parent="#accordionWidget">
+                  <div class="accordion-body">
+                    <div id="widget-card">
+                      <div id="sign-widget-parent" style="width: 100%; height: 420px"></div>
+                    </div>
+
+                    <div class="card-footer text-body-secondary">
+                      <button class="btn btn-primary" id="buttonResetKey" disabled>Зтерти ключ</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion mt-4" id="certificatesCard" style="display: none">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseOneSigner"
+                    aria-expanded="true"
+                    aria-controls="collapseOneSigner"
+                  >
+                    Інформація про ключ
+                  </button>
+                </h2>
+
+                <div id="collapseOneSigner" class="accordion-collapse collapse show" data-bs-parent="#certificatesCard">
+                  <div class="accordion-body overflow-x-auto overflow-y-auto" style="max-height: 400px">
+                    <div class="card-body" id="certificates-container"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion mt-4" id="verifySignCard" style="display: none">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseVerifySign"
+                    aria-expanded="true"
+                    aria-controls="collapseVerifySign"
+                  >
+                    Інформація про підпис
+                  </button>
+                </h2>
+
+                <div id="collapseVerifySign" class="accordion-collapse collapse show" data-bs-parent="#verifySignCard">
+                  <div class="accordion-body overflow-x-auto overflow-y-auto" style="max-height: 400px">
+                    <div class="alert" role="alert" id="verifySignAlert"></div>
+
+                    <div
+                      class="alert alert-danger mt-3 overflow-auto"
+                      id="verifySignCheckDiff"
+                      style="display: none"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion mt-4" id="signersCard" style="display: none">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseSigners"
+                    aria-expanded="true"
+                    aria-controls="collapseSigners"
+                  >
+                    Інформація про підписантів
+                  </button>
+                </h2>
+
+                <div id="collapseSigners" class="accordion-collapse collapse show" data-bs-parent="#signersCard">
+                  <div class="accordion-body overflow-x-auto overflow-y-auto" style="max-height: 400px">
+                    <div id="verifySigners"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion mt-4" id="signDataCard" style="display: none">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseSignData"
+                    aria-expanded="true"
+                    aria-controls="collapseSignData"
+                  >
+                    Дані з підпису
+                  </button>
+                </h2>
+
+                <div id="collapseSignData" class="accordion-collapse collapse show" data-bs-parent="#signDataCard">
+                  <div class="accordion-body overflow-x-auto overflow-y-auto" style="max-height: 400px">
+                    <pre id="signDataPreview"></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template id="app-spinner-template">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      <span role="status">Loading...</span>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsondiffpatch@0.5.0/dist/jsondiffpatch.umd.min.js"></script>
+
+    <script type="module" src="/src/main.ts"></script>
+
+    <script>
+      const qs = selector => document.querySelector(selector);
+      const log = message => console.log("TestPage:", message);
+
+      const DEFAULT_OBJECT_URL = "/test-data/tender.json";
+
+      /**
+       * @type {{
+       *     objects: Uint8Array | null,
+       *     data: Uint8Array | null,
+       *     file: string | Uint8Array | null,
+       * }}
+       */
+      const signed = {
+        objects: null,
+        data: null,
+        file: null,
+      };
+
+      /**
+       * @type {{
+       *     div: Object.<HTMLDivElement>,
+       *     button: Object.<HTMLLabelElement>,
+       *     textarea: Object.<HTMLTextAreaElement>,
+       *     input: Object.<HTMLInputElement>,
+       * }}
+       */
+      const element = {
+        div: {
+          widgetCard: qs("#widget-card"),
+          certificatesCard: qs("#certificatesCard"),
+          certificatesContainer: qs("#certificates-container"),
+        },
+        button: {
+          signUrl: qs("#buttonSignUrl"),
+          addSignToData: qs("#buttonAddSignToData"),
+          signData: qs("#buttonSignData"),
+          verifyUrl: qs("#buttonVerifyUrl"),
+          downloadSignedObjects: qs("#buttonDownloadSignedObjects"),
+          downloadSignedData: qs("#buttonDownloadSignedData"),
+          signVerify: qs("#buttonSignVerify"),
+          resetKey: qs("#buttonResetKey"),
+          signFile: qs("#buttonSignFile"),
+          addSignToFile: qs("#buttonAddSignToFile"),
+          downloadSignedFile: qs("#buttonDownloadSignedFile"),
+        },
+        textarea: {
+          url: qs("#inputUrl"),
+          data: qs("#dataForSign"),
+        },
+        input: {
+          fileSign: qs("#fileSign"),
+          fileForSign: qs("#fileForSign"),
+        },
+      };
+
+      /**
+       * @param {string} key
+       * @param {object} options
+       * @param {any} options.defaultData
+       * @return {any}
+       */
+      function getStoredData(key, { defaultData }) {
+        const data = localStorage.getItem(key);
+
+        if (data === null) {
+          return defaultData;
+        }
+
+        return data;
+      }
+
+      /**
+       * @return {void}
+       */
+      function setInputValues() {
+        element.textarea.url.value = getStoredData("url", {
+          defaultData: DEFAULT_OBJECT_URL,
+        });
+        element.textarea.data.value = getStoredData("dataForSign", { defaultData: "" });
+      }
+
+      function createCertificateField(title, value) {
+        const elementResult = document.createElement("p");
+        const elementTitle = document.createElement("small");
+        const elementValue = document.createElement("div");
+
+        elementTitle.innerText = title;
+        elementValue.innerText = value;
+        elementValue.classList.add("text-dark");
+        elementResult.classList.add("card-text");
+        elementResult.append(elementTitle, elementValue);
+
+        return elementResult;
+      }
+
+      /**
+       * @param {[]} signers
+       */
+      function showSigners(signers) {
+        qs("#signersCard").style.display = "block";
+        const elementSigners = qs("#verifySigners");
+
+        const pad = num => String(num).padStart(2, "0");
+
+        const createSignerTime = time => {
+          return [
+            pad(time.hour),
+            ":",
+            pad(time.minute),
+            ":",
+            pad(time.second),
+            " ",
+            pad(time.day),
+            ".",
+            pad(time.month),
+            ".",
+            time.year,
+          ].join("");
+        };
+
+        const createSignerFields = signer => {
+          const keyAliasMap = new Map()
+            .set("subjectFullName", "П.І.Б.")
+            .set("subjectDRFOCode", "РНОКПП")
+            .set("subjectOrg", "Організація (установа)")
+            .set("subjectEDRPOUCode", "Код ЄДРПОУ")
+            .set("subjectEMail", "Email")
+            .set("subjectTitle", "Посада")
+            .set("subjectState", "Область")
+            .set("subjectLocality", "Місто")
+            .set("time", "Час підпису")
+            .set("issuerCN", "Сертифікат виданий")
+            .set("serial", "Серійний номер");
+
+          return Object.keys(signer)
+            .map(key => {
+              const keyAlias = keyAliasMap.get(key);
+              let value = signer[key];
+
+              if (keyAlias === undefined || value === "") {
+                return false;
+              }
+
+              if (key === "time") {
+                value = createSignerTime(signer[key]);
+              }
+
+              return createCertificateField(keyAlias, value);
+            })
+            .filter(Boolean);
+        };
+
+        const createSignerCard = index => {
+          const signerCard = document.createElement("div");
+          const signerHeader = document.createElement("div");
+          const signerBody = document.createElement("div");
+
+          signerCard.classList.add("card", "overflow-auto");
+          signerHeader.classList.add("card-header");
+          signerBody.classList.add("card-body");
+
+          signerHeader.innerText = `Підписант №${index + 1}`;
+          signerCard.append(signerHeader, signerBody);
+
+          return signerCard;
+        };
+
+        elementSigners.innerHTML = "";
+
+        (signers || []).forEach((signer, index) => {
+          const signerCard = createSignerCard(index);
+          const signerFields = createSignerFields(signer);
+          signerCard.querySelector(".card-body").append(...signerFields);
+          elementSigners.append(signerCard);
+
+          if (index) {
+            signerCard.classList.add("mt-3");
+          }
+
+          elementSigners.style.display = "block";
+          log(signer);
+        });
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function signObject() {
+        try {
+          const response = await fetch(element.textarea.url.value);
+          const { data } = await response.json();
+          const sign = await window.ProzorroEds.sign(JSON.stringify(data));
+
+          log(sign);
+          signed.objects = sign;
+          element.button.downloadSignedObjects.disabled = false;
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function signData() {
+        try {
+          const sign = await window.ProzorroEds.sign(element.textarea.data.value);
+
+          log(sign);
+          signed.data = sign;
+          element.button.downloadSignedData.disabled = false;
+          element.button.addSignToData.disabled = false;
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function addSignToData() {
+        try {
+          const sign = await window.ProzorroEds.sign(signed.data);
+
+          log(sign);
+          signed.data = sign;
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function signFile() {
+        try {
+          const reader = new FileReader();
+
+          reader.onloadend = async () => {
+            const file = reader.result.replace(/^data:.+;base64,/, "");
+            const sign = await window.ProzorroEds.sign(file);
+            log(sign);
+            signed.file = sign;
+
+            element.button.downloadSignedFile.disabled = false;
+            element.button.addSignToFile.disabled = false;
+          };
+
+          reader.readAsDataURL(element.input.fileForSign.files[0]);
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function addSignToFile() {
+        try {
+          const sign = await window.ProzorroEds.sign(signed.file);
+          log(sign);
+          signed.file = sign;
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function downloadSignedObjects() {
+        if (signed.objects === null) {
+          alert("Sign is empty");
+          return Promise.reject();
+        }
+
+        await downloadSign(signed.objects, `signedData`);
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function downloadSignedData() {
+        if (signed.data === null) {
+          alert("Sign is empty");
+          return Promise.reject();
+        }
+
+        await downloadSign(signed.data, `signedData`);
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function downloadSignedFile() {
+        if (signed.file === null) {
+          alert("Sign is empty");
+          return Promise.reject();
+        }
+
+        await downloadSign(signed.file, `signedFile`);
+      }
+
+      /**
+       * @param {Uint8Array} sign
+       * @param {string} filename
+       * @return {Promise<void>}
+       */
+      async function downloadSign(sign, filename) {
+        const downloadURL = (data, fileName) => {
+          const a = document.createElement("a");
+          a.href = data;
+          a.download = fileName;
+          document.body.append(a);
+          a.style.display = "none";
+          a.click();
+          a.remove();
+        };
+
+        const downloadBlob = (data, fileName, mimeType) => {
+          const blob = new Blob([data], {
+            type: mimeType,
+          });
+          const url = window.URL.createObjectURL(blob);
+          downloadURL(url, fileName);
+          setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+        };
+
+        downloadBlob(sign, `${filename}.p7s`, "application/octet-stream");
+        await new Promise(r => setTimeout(r, 1000));
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function verifyLinks() {
+        try {
+          const verifiedObjects = await window.ProzorroEds.verifyObjects([element.textarea.url.value]);
+
+          if (!verifiedObjects.length) {
+            alert("Error");
+            return;
+          }
+
+          const signInfo = verifiedObjects[0];
+          const hasDiff = Boolean(signInfo.difference);
+          const alertBlock = qs("#verifySignAlert");
+          const elementDiff = qs("#verifySignCheckDiff");
+
+          document.getElementById("verifySignCard").style.display = "block";
+          alertBlock.classList.remove("alert-danger", "alert-success");
+          alertBlock.classList.add(hasDiff ? "alert-danger" : "alert-success");
+          alertBlock.innerHTML = hasDiff ? "Підпис невірний" : "Підпис успішно перевірено";
+
+          elementDiff.style.display = "none";
+          elementDiff.innerHTML = "";
+
+          showSigners(signInfo.signers);
+
+          if (signInfo.difference !== undefined) {
+            const customDiffPatch = jsondiffpatch.create({
+              arrays: {
+                detectMove: true,
+              },
+            });
+            const customDelta = customDiffPatch.diff(signInfo.data.fromSign, signInfo.data.fromDb);
+            const htmlDiff = jsondiffpatch.formatters.html.format(customDelta, signInfo.data.fromDb);
+
+            jsondiffpatch.formatters.html.hideUnchanged();
+            elementDiff.style.display = "block";
+            elementDiff.innerHTML = htmlDiff;
+          }
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
+      }
+
+      /**
+       * @return  {void}
+       */
+      async function verifySign() {
+        try {
+          const reader = new FileReader();
+
+          reader.onloadend = async () => {
+            const file = reader.result.replace(/^data:.+;base64,/, "");
+            const result = await window.ProzorroEds.verify(file, "UTF-8");
+
+            showSigners(result.signers);
+
+            qs("#signDataCard").style.display = "block";
+            qs("#signDataPreview").innerText = result.data;
+
+            log(result);
+          };
+
+          reader.readAsDataURL(element.input.fileSign.files[0]);
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
+      }
+
+      const widgetState = {
+        start: "start",
+        end: "end",
+      };
+
+      /**
+       * @param {'start' | 'end'} state
+       */
+      function setWidgetState(state) {
+        const buttonState = state === widgetState.start;
+
+        element.button.signUrl.disabled = buttonState;
+        element.button.signData.disabled = buttonState;
+        element.button.signFile.disabled = buttonState;
+        element.button.resetKey.disabled = buttonState;
+
+        if (state === widgetState.end) {
+          element.div.widgetCard.classList.add("widget-disabled");
+        }
+
+        if (state === widgetState.start) {
+          element.div.widgetCard.classList.remove("widget-disabled");
+        }
+      }
+
+      function showCertificates(certificates) {
+        log(certificates);
+
+        certificates.forEach((certificate, index) => {
+          const titleElement = document.createElement("h5");
+          const { infoEx } = certificate;
+
+          element.div.certificatesCard.style.display = "block";
+          titleElement.innerText = `Cертифікат №${index + 1}`;
+          titleElement.classList.add("card-title");
+          element.div.certificatesContainer.append(titleElement);
+
+          Object.entries(infoEx).forEach(field => {
+            const title = field[0];
+            let value = field[1];
+
+            if (value === "") {
+              value = '""';
+            }
+
+            element.div.certificatesContainer.append(createCertificateField(title, value));
+          });
+        });
+      }
+
+      async function resetKey(widgetService) {
+        await widgetService.resetKey();
+        element.div.certificatesCard.style.display = "none";
+        element.div.certificatesContainer.innerHTML = "";
+        setWidgetState(widgetState.start);
+      }
+
+      const btnActionWrapper = async (cb, { target }) => {
+        const text = target.textContent;
+
+        try {
+          target.disabled = true;
+          target.innerHTML = "";
+          target.appendChild(document.getElementById("app-spinner-template").content.cloneNode(true));
+
+          await cb(event);
+        } catch (error) {
+          // errorExceptionHandler(error);
+        } finally {
+          target.disabled = false;
+          target.innerHTML = text;
+        }
+      };
+
+      element.button.signUrl.addEventListener("click", event => btnActionWrapper(signObject, event));
+      element.button.verifyUrl.addEventListener("click", event => btnActionWrapper(verifyLinks, event));
+      element.button.signVerify.addEventListener("click", event => btnActionWrapper(verifySign, event));
+      element.button.signData.addEventListener("click", event => btnActionWrapper(signData, event));
+      element.button.signFile.addEventListener("click", event => btnActionWrapper(signFile, event));
+      element.button.addSignToData.addEventListener("click", event => btnActionWrapper(addSignToData, event));
+      element.button.addSignToFile.addEventListener("click", event => btnActionWrapper(addSignToFile, event));
+      element.button.downloadSignedObjects.addEventListener("click", event => btnActionWrapper(downloadSignedObjects, event));
+      element.button.downloadSignedData.addEventListener("click", event => btnActionWrapper(downloadSignedData, event));
+      element.button.downloadSignedFile.addEventListener("click", event => btnActionWrapper(downloadSignedFile, event));
+
+      document.querySelectorAll("[data-store-key]").forEach(element => {
+        element.addEventListener("keyup", event =>
+          localStorage.setItem(event.target.dataset.storeKey, event.target.value)
+        );
+      });
+
+      setInputValues();
+
+      window.onload = async () => {
+        await window.ProzorroEds.init({
+            debug: true,
+            environment: "development",
+            callbackAfterAuth: certificates => {
+            showCertificates(certificates);
+            setWidgetState(widgetState.end);
+          },
+        });
+
+        const widgetService = await window.ProzorroEds.loadWidget({
+            parentId: "sign-widget-parent",
+            frameId: "sign-widget",
+        });
+
+        element.button.resetKey.addEventListener("click", () => resetKey(widgetService));
+
+        document.getElementById("layoutSwitchSimple").addEventListener("change", function () {
+          const rows = document.querySelectorAll("#layoutRow .col");
+          rows.forEach(row => (row.classList.value = this.checked ? "col col-12" : "col col-12 col-xl-6"));
+        });
+      };
+    </script>
+  </body>
+</html>

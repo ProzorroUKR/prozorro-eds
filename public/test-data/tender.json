@@ -1,0 +1,300 @@
+{
+  "data": {
+    "title": "\u0437\u0430\u043f\u0447\u0430\u0441\u0442\u0438\u043d\u0438 \u0434\u043e \u0434\u0432\u0438\u0433\u0443\u043d\u0430",
+    "documents": [
+      {
+        "id": "041636fd86134ce089bf51d4a46be226",
+        "hash": "md5:6c22e86b4964ec847260d3fcf75152fa",
+        "title": "sign.p7s",
+        "title_en": "sign.p7s",
+        "title_ru": "sign.p7s",
+        "description": "SHA1: df92ffd9bd6d0dcdcc5082b9cbaccde6e1c2bad5; SHA2-384: 1d980d27adcdaee0880b4d8abff5da2de17365b8a89d3ca2b66d902af65eb5895a03a1219858ccdf2c26b2513fcc7989",
+        "format": "application/pkcs7-signature",
+        "url": "/test-data/sign.p7s",
+        "datePublished": "2021-01-11T14:59:47.584205+02:00",
+        "dateModified": "2021-01-11T14:59:47.584228+02:00",
+        "documentOf": "tender"
+      }
+    ],
+    "date": "2021-01-11T16:07:23.155765+02:00",
+    "dateModified": "2021-01-11T16:07:23.155765+02:00",
+    "tenderID": "UA-2021-01-11-002071-a",
+    "owner": "netcast.com.ua",
+    "mainProcurementCategory": "goods",
+    "milestones": [
+      {
+        "id": "126d76c2057b4001a7933bc89da5aee9",
+        "title": "deliveryOfGoods",
+        "description": "\u0437\u0430\u043f\u0447\u0430\u0441\u0442\u0438\u043d\u0438 \u0434\u043e \u0434\u0432\u0438\u0433\u0443\u043d\u0430",
+        "type": "financing",
+        "code": "postpayment",
+        "percentage": 100.0,
+        "duration": {
+          "days": 3,
+          "type": "working"
+        },
+        "sequenceNumber": 0
+      }
+    ],
+    "plans": [
+      {
+        "id": "7854b8bd020942d8b58ee715ad19daf1"
+      }
+    ],
+    "items": [
+      {
+        "id": "ccacc430eaaeb749969fb1db6a274705",
+        "description": "\u0437\u0430\u043f\u0447\u0430\u0441\u0442\u0438\u043d\u0438 \u0434\u043e \u0434\u0432\u0438\u0433\u0443\u043d\u0430",
+        "quantity": 1.0,
+        "classification": {
+          "description": "\u0414\u0432\u0438\u0433\u0443\u043d\u0438 \u0442\u0430 \u0457\u0445 \u0447\u0430\u0441\u0442\u0438\u043d\u0438",
+          "scheme": "\u0414\u041a021",
+          "id": "34310000-3"
+        },
+        "deliveryDate": {
+          "startDate": "2021-01-05T14:59:01+02:00",
+          "endDate": "2021-01-31T14:59:01+02:00"
+        },
+        "deliveryAddress": {
+          "streetAddress": "\u0432\u0443\u043b\u0438\u0446\u044f \u0412\u043e\u0432\u0447\u0438\u043d\u0435\u0446\u044c\u043a\u0430, 127",
+          "locality": "\u043c\u0456\u0441\u0442\u043e \u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a",
+          "region": "\u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a\u0430 \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+          "postalCode": "76007",
+          "countryName": "\u0423\u043a\u0440\u0430\u0457\u043d\u0430"
+        },
+        "unit": {
+          "name": "\u043a\u043e\u043c\u043f\u043b\u0435\u043a\u0442\u0438",
+          "code": "KT",
+          "value": {
+            "amount": 3000.0,
+            "currency": "UAH",
+            "valueAddedTaxIncluded": false
+          }
+        }
+      }
+    ],
+    "value": {
+      "amount": 3000.001,
+      "currency": "UAH",
+      "valueAddedTaxIncluded": false
+    },
+    "procurementMethod": "limited",
+    "procurementMethodType": "reporting",
+    "procuringEntity": {
+      "name": "\u0414\u041f \u0414\u0435\u0440\u0436\u0430\u0432\u043d\u0435 \u043f\u0456\u0434\u043f\u0440\u0438\u0454\u043c\u0441\u0442\u0432\u043e \"\u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a\u0438\u0439 \u043d\u0430\u0443\u043a\u043e\u0432\u043e-\u0432\u0438\u0440\u043e\u0431\u043d\u0438\u0447\u0438\u0439 \u0446\u0435\u043d\u0442\u0440 \u0441\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u0438\u0437\u0430\u0446\u0456\u0457, \u043c\u0435\u0442\u0440\u043e\u043b\u043e\u0433\u0456\u0457 \u0442\u0430 \u0441\u0435\u0440\u0442\u0438\u0444\u0456\u043a\u0430\u0446\u0456\u0457\"",
+      "name_en": "GovE STATE ENTERPRISE \"IVANO-FRANKIVSK RESEARCH-AND-PRODUCTION CENTER FOR STANDARDIZATION, METROLOGY AND CERTIFICATION\u201d (SE \u201cIVANO-FRANKIVSKSTANDARDMETROLOGY\u201d)",
+      "identifier": {
+        "scheme": "UA-EDR",
+        "id": "02568176",
+        "legalName": "\u0414\u041f \u0414\u0435\u0440\u0436\u0430\u0432\u043d\u0435 \u043f\u0456\u0434\u043f\u0440\u0438\u0454\u043c\u0441\u0442\u0432\u043e \"\u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a\u0438\u0439 \u043d\u0430\u0443\u043a\u043e\u0432\u043e-\u0432\u0438\u0440\u043e\u0431\u043d\u0438\u0447\u0438\u0439 \u0446\u0435\u043d\u0442\u0440 \u0441\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u0438\u0437\u0430\u0446\u0456\u0457, \u043c\u0435\u0442\u0440\u043e\u043b\u043e\u0433\u0456\u0457 \u0442\u0430 \u0441\u0435\u0440\u0442\u0438\u0444\u0456\u043a\u0430\u0446\u0456\u0457\"",
+        "legalName_en": "GovE STATE ENTERPRISE \"IVANO-FRANKIVSK RESEARCH-AND-PRODUCTION CENTER FOR STANDARDIZATION, METROLOGY AND CERTIFICATION\u201d (SE \u201cIVANO-FRANKIVSKSTANDARDMETROLOGY\u201d)"
+      },
+      "address": {
+        "streetAddress": "\u0432\u0443\u043b\u0438\u0446\u044f \u0412\u043e\u0432\u0447\u0438\u043d\u0435\u0446\u044c\u043a\u0430, 127",
+        "locality": "\u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a",
+        "region": "\u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a\u0430 \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+        "postalCode": "76007",
+        "countryName": "\u0423\u043a\u0440\u0430\u0457\u043d\u0430"
+      },
+      "contactPoint": {
+        "name": "\u0411\u0456\u0434\u043e\u0447\u043a\u043e \u0414\u0456\u0430\u043d\u0430 \u0412\u0430\u0441\u0438\u043b\u0456\u0432\u043d\u0430",
+        "name_en": "  ",
+        "name_ru": "  ",
+        "email": "molfarka2015@ukr.net",
+        "telephone": "+380342535633"
+      },
+      "kind": "special"
+    },
+    "awards": [
+      {
+        "id": "3737e870a17a48a6a7bba1375850d1c6",
+        "status": "active",
+        "date": "2021-01-11T15:44:40.596424+02:00",
+        "value": {
+          "amount": 3000.0,
+          "currency": "UAH",
+          "valueAddedTaxIncluded": false
+        },
+        "suppliers": [
+          {
+            "name": "\u041f\u0456\u0434\u043f\u0440\u0438\u0454\u043c\u0435\u0446\u044c \u0421\u0435\u0440\u0433\u0435\u043d\u044e\u043a",
+            "identifier": {
+              "scheme": "UA-EDR",
+              "id": "2147106758"
+            },
+            "address": {
+              "streetAddress": "\u0432\u0443\u043b\u0438\u0446\u044f \u0413\u0430\u043c\u0430\u043b\u0456\u0457, 20",
+              "locality": "\u0441\u0435\u043b\u043e \u041a\u0440\u0438\u0445\u0456\u0432\u0446\u0456",
+              "region": "\u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a\u0430 \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+              "postalCode": "76493",
+              "countryName": "\u0423\u043a\u0440\u0430\u0457\u043d\u0430"
+            },
+            "contactPoint": {
+              "name": "\u0421\u0435\u0440\u0433\u0435\u043d\u044e\u043a \u041c\u0438\u0445\u0430\u0439\u043b\u043e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u0438\u0447",
+              "telephone": "0342 711700"
+            },
+            "scale": "micro"
+          }
+        ],
+        "documents": [
+          {
+            "id": "fd400ecc5c0d46d09ecb6d704fa49912",
+            "hash": "md5:24191a9829a7823054788a6ecf802422",
+            "title": "sign.p7s",
+            "title_en": "sign.p7s",
+            "title_ru": "sign.p7s",
+            "description": "SHA1: 452670d6149a2ec238d121f2d73b8c3ee5284bde; SHA2-384: 69e858e323aca0d576e869f35f76e7817235ee5675719d5af087c4d84959ff014ba2026ee07f0d55ef32b4ce2dc3ef88",
+            "format": "application/pkcs7-signature",
+            "url": "https://public.docs.openprocurement.org/get/30d7843b4aa2450e978cc6e86a796355?KeyID=52462340&Signature=fQ7ZcnWqJrRJ8uoKjfQZ88TQFYdcwDpiW9hPWrAbjzrhKO6y6ns55bDMWw7YlzKfdiVblGku516tt6rtm6UdCA%253D%253D",
+            "datePublished": "2021-01-11T15:44:19.243232+02:00",
+            "dateModified": "2021-01-11T15:44:19.243265+02:00",
+            "documentOf": "tender"
+          },
+          {
+            "id": "fd400ecc5c0d46d09ecb6d704fa49913",
+            "hash": "md5:24191a9829a7823054788a6ecf802423",
+            "title": "26590034554364J1499202100800129811020202659.XML.p7s",
+            "title_en": "26590034554364J1499202100800129811020202659.XML.p7s",
+            "title_ru": "26590034554364J1499202100800129811020202659.XML.p7s",
+            "description": "SHA1: 452670d6149a2ec238d121f2d73b8c3ee5284bde; SHA2-384: 69e858e323aca0d576e869f35f76e7817235ee5675719d5af087c4d84959ff014ba2026ee07f0d55ef32b4ce2dc3ef88",
+            "format": "application/pkcs7-signature",
+            "url": "/26590034554364J1499202100800129811020202659.XML.p7s",
+            "datePublished": "2021-01-11T15:44:19.243232+02:00",
+            "dateModified": "2021-01-11T15:44:19.243265+02:00",
+            "documentOf": "tender"
+          },
+          {
+            "id": "fd400ecc5c0d46d09ecb6d704fa49915",
+            "hash": "md5:24191a9829a7823054788a6ecf802425",
+            "title": "document.XML.p7s",
+            "title_en": "document.XML.p7s",
+            "title_ru": "document.XML.p7s",
+            "description": "SHA1: 452670d6149a2ec238d121f2d73b8c3ee5284bde; SHA2-384: 69e858e323aca0d576e869f35f76e7817235ee5675719d5af087c4d84959ff014ba2026ee07f0d55ef32b4ce2dc3ef88",
+            "format": "application/pkcs7-signature",
+            "url": "/test-data/document.XML.p7s",
+            "datePublished": "2021-01-11T15:44:19.243232+02:00",
+            "dateModified": "2021-01-11T15:44:19.243265+02:00",
+            "documentOf": "tender"
+          },
+          {
+            "id": "fd400ecc5c0d46d09ecb6d704fa49915",
+            "hash": "md5:24191a9829a7823054788a6ecf802425",
+            "title": "document.KVT.p7s",
+            "title_en": "document.KVT.p7s",
+            "title_ru": "document.KVT.p7s",
+            "description": "SHA1: 452670d6149a2ec238d121f2d73b8c3ee5284bde; SHA2-384: 69e858e323aca0d576e869f35f76e7817235ee5675719d5af087c4d84959ff014ba2026ee07f0d55ef32b4ce2dc3ef88",
+            "format": "application/pkcs7-signature",
+            "url": "/test-data/document.KVT.p7s",
+            "datePublished": "2021-01-11T15:44:19.243232+02:00",
+            "dateModified": "2021-01-11T15:44:19.243265+02:00",
+            "documentOf": "tender"
+          }
+        ]
+      }
+    ],
+    "contracts": [
+      {
+        "id": "7c64f9160cb64d3d9dee6d46bebbe5b4",
+        "contractID": "UA-2021-01-11-002071-a-a1",
+        "contractNumber": "\u0430\u043a\u0442 \u21162",
+        "status": "active",
+        "period": {
+          "startDate": "2021-01-05T00:00:00+02:00",
+          "endDate": "2021-01-31T23:59:59+02:00"
+        },
+        "dateSigned": "2021-01-05T00:00:00+02:00",
+        "suppliers": [
+          {
+            "name": "\u041f\u0456\u0434\u043f\u0440\u0438\u0454\u043c\u0435\u0446\u044c \u0421\u0435\u0440\u0433\u0435\u043d\u044e\u043a",
+            "identifier": {
+              "scheme": "UA-EDR",
+              "id": "2147106758"
+            },
+            "address": {
+              "streetAddress": "\u0432\u0443\u043b\u0438\u0446\u044f \u0413\u0430\u043c\u0430\u043b\u0456\u0457, 20",
+              "locality": "\u0441\u0435\u043b\u043e \u041a\u0440\u0438\u0445\u0456\u0432\u0446\u0456",
+              "region": "\u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a\u0430 \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+              "postalCode": "76493",
+              "countryName": "\u0423\u043a\u0440\u0430\u0457\u043d\u0430"
+            },
+            "contactPoint": {
+              "name": "\u0421\u0435\u0440\u0433\u0435\u043d\u044e\u043a \u041c\u0438\u0445\u0430\u0439\u043b\u043e \u041c\u0438\u0445\u0430\u0439\u043b\u043e\u0432\u0438\u0447",
+              "telephone": "0342 711700"
+            },
+            "scale": "micro"
+          }
+        ],
+        "date": "2021-01-11T16:07:23.155765+02:00",
+        "value": {
+          "amount": 3000.0,
+          "currency": "UAH",
+          "valueAddedTaxIncluded": false,
+          "amountNet": 3000.0
+        },
+        "awardID": "3737e870a17a48a6a7bba1375850d1c6",
+        "documents": [
+          {
+            "id": "0f144bffa50049139c21538bab7aed4d",
+            "hash": "md5:502c3e170acfea22cb92c3cea2ee69ad",
+            "title": "\u0410\u043a\u0442 \u0432\u0438\u043a. \u0440\u043e\u0431\u0456\u0442 _ 2.pdf",
+            "title_en": "\u0410\u043a\u0442 \u0432\u0438\u043a. \u0440\u043e\u0431\u0456\u0442 _ 2.pdf",
+            "title_ru": "\u0410\u043a\u0442 \u0432\u0438\u043a. \u0440\u043e\u0431\u0456\u0442 _ 2.pdf",
+            "description": "SHA1: 9cf48053b1e556b3536c7d8f15c7bd618c47fcfd; SHA2-384: 0e82cd2fc9611274cf8ed4a6505db2c19a150c337f09ada47589e47d05fc21bbadbd4cde45a0014bb24b1f30de16ee62",
+            "format": "application/pdf",
+            "url": "https://public.docs.openprocurement.org/get/1d34356ceae04c2d86043be9e31251e7?KeyID=52462340&Signature=p0BUd6FUUecOATWAc%2FrWRCU0VtJ%2Fpgy%252Bf0ZjYpmLT2sTYHVSfLp662TFdp7AFc4a6yoS27CubBkIAngpM0JCDQ%253D%253D",
+            "datePublished": "2021-01-11T15:46:46.983238+02:00",
+            "dateModified": "2021-01-11T15:46:46.983274+02:00",
+            "documentOf": "tender"
+          },
+          {
+            "id": "99c9f699319c48e38ae3bf1bcd300155",
+            "hash": "md5:bad28b0c883a7712dda199e78cd01930",
+            "title": "sign.p7s",
+            "title_en": "sign.p7s",
+            "title_ru": "sign.p7s",
+            "description": "SHA1: fc621ec39bdd1b57e6a3d3af37f6314d4936359e; SHA2-384: 349342ea8bee2d560d97c7d2d4a2888b684a54ae0f7613e4a4f3fa3e8132570ed32f305e809b494c1ca0fe76d3cd206d",
+            "format": "application/pkcs7-signature",
+            "url": "https://public.docs.openprocurement.org/get/f3aef3e9f361472ca8bf64c9a0747b1d?KeyID=52462340&Signature=1V2jJqRQ1F6m0og18XnvkvuRXrsnx8ZtZA4jux7XOY3dbAK7512InhDeqwqTTGdcgk9MYuZA%252BPjEJGw8g3f2BQ%253D%253D",
+            "datePublished": "2021-01-11T16:07:19.132826+02:00",
+            "dateModified": "2021-01-11T16:07:19.132867+02:00",
+            "documentOf": "tender"
+          }
+        ],
+        "items": [
+          {
+            "id": "ccacc430eaaeb749969fb1db6a274705",
+            "description": "\u0437\u0430\u043f\u0447\u0430\u0441\u0442\u0438\u043d\u0438 \u0434\u043e \u0434\u0432\u0438\u0433\u0443\u043d\u0430",
+            "quantity": 1.0,
+            "classification": {
+              "description": "\u0414\u0432\u0438\u0433\u0443\u043d\u0438 \u0442\u0430 \u0457\u0445 \u0447\u0430\u0441\u0442\u0438\u043d\u0438",
+              "scheme": "\u0414\u041a021",
+              "id": "34310000-3"
+            },
+            "deliveryDate": {
+              "startDate": "2021-01-05T14:59:01+02:00",
+              "endDate": "2021-01-31T14:59:01+02:00"
+            },
+            "deliveryAddress": {
+              "streetAddress": "\u0432\u0443\u043b\u0438\u0446\u044f \u0412\u043e\u0432\u0447\u0438\u043d\u0435\u0446\u044c\u043a\u0430, 127",
+              "locality": "\u043c\u0456\u0441\u0442\u043e \u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a",
+              "region": "\u0406\u0432\u0430\u043d\u043e-\u0424\u0440\u0430\u043d\u043a\u0456\u0432\u0441\u044c\u043a\u0430 \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+              "postalCode": "76007",
+              "countryName": "\u0423\u043a\u0440\u0430\u0457\u043d\u0430"
+            },
+            "unit": {
+              "name": "\u043a\u043e\u043c\u043f\u043b\u0435\u043a\u0442\u0438",
+              "code": "KT",
+              "value": {
+                "amount": 3000.0,
+                "currency": "UAH",
+                "valueAddedTaxIncluded": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "status": "complete",
+    "id": "21a30a38dd1b4ff8a6bb3e0343307734"
+  }
+}

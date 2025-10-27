@@ -1,0 +1,7 @@
+# Block Googlebot
+User-agent: Googlebot
+Disallow: /
+
+# Allow all other crawlers
+User-agent: *
+Disallow: / 
