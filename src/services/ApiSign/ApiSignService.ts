@@ -6,6 +6,7 @@ import { EdsError } from "@/services/Error/EdsError";
 import type { ApiSignDecryptResponseType } from "@/types/http/ApiSignDecryptResponseType";
 import { API_SIGN_METHODS } from "@/constants/apiSignMethods";
 import type { EnvironmentType } from "@/types/EnvironmentType.ts";
+import { HTTP } from "@/constants/http.ts";
 
 export interface IApiSignService {
   decrypt(sign: string): Promise<ApiSignDecryptResponseType>;
@@ -31,9 +32,13 @@ export class ApiSignService implements IApiSignService {
       );
     } catch (e: any) {
       const error: AxiosError<ApiSignDecryptResponseType> = e;
+      const errors = (error?.response?.data?.errors || []).map(error => `Decrypt error: ${error.description}`);
 
-      if (error.response !== undefined && error.response.data.errors !== undefined) {
-        const errors = error.response.data.errors.map(error => `Decrypt error: ${error.description}`);
+      if (error.status === HTTP.STATUS.BAD_REQUEST) {
+        throw new EdsError(errorMessages.incorrectSignFile, errors.join(STRING.DELIMITER.DOT));
+      }
+
+      if (error?.response?.data?.errors !== undefined) {
         throw new EdsError(errorMessages.apiSignError, errors.join(STRING.DELIMITER.DOT));
       }
 

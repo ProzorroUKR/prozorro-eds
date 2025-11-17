@@ -49,15 +49,17 @@ export const errorMessages: Record<string, ErrorMessageType> = {
     message: "Не вірний формат вхідних даних",
     code: "012",
   },
-
   incorrectWidgetParentIdParam: {
     message:
       "Не вірний ідентифікатор батківського елементу для відображення iframe, який завантажує сторінку SignWidget",
     code: "013",
   },
-
   incorrectWidgetIdParam: {
     message: "Не вірний ідентифікатор iframe, який завантажує сторінку SignWidget",
     code: "014",
+  },
+  incorrectSignFile: {
+    message: "Виникла помилка під час дешифрування даних. Невірний формат вхідних даних або не валідний підпис",
+    code: "015",
   },
 } as const;

@@ -738,27 +738,27 @@
        * @return  {void}
        */
       async function verifySign() {
-        try {
-          const reader = new FileReader();
+        const reader = new FileReader();
 
-          reader.onloadend = async () => {
-            const file = reader.result.replace(/^data:.+;base64,/, "");
-            const result = await window.ProzorroEds.verify(file, "UTF-8");
+        reader.onloadend = async () => {
+            try {
+                const file = reader.result.replace(/^data:.+;base64,/, "");
+                const result = await window.ProzorroEds.verify(file, "UTF-8");
 
-            showSigners(result.signers);
+                showSigners(result.signers);
 
-            qs("#signDataCard").style.display = "block";
-            qs("#signDataPreview").innerText = result.data;
+                qs("#signDataCard").style.display = "block";
+                qs("#signDataPreview").innerText = result.data;
 
-            log(result);
-          };
+                log(result);
+            } catch (e) {
+                alert(e.message);
+                console.error(e);
+                console.log(`Code: ${e.code}. Message: ${e.message}`);
+            }
+        };
 
-          reader.readAsDataURL(element.input.fileSign.files[0]);
-        } catch (e) {
-          alert(e.message);
-          console.error(e);
-          console.log(`Code: ${e.code}. Message: ${e.message}`);
-        }
+        reader.readAsDataURL(element.input.fileSign.files[0]);
       }
 
       const widgetState = {
@@ -856,7 +856,7 @@
 
       window.onload = async () => {
         await window.ProzorroEds.init({
-            debug: true,
+            debug: false,
             environment: "development",
             callbackAfterAuth: certificates => {
             showCertificates(certificates);
