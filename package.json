@@ -23,8 +23,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite --config vite.config.lib.ts",
-    "build:lib": "tsc && vite build --config vite.config.lib.ts && npm run types && copyfiles ./package.json dist && npm run removeFromBuild:lib",
+    "dev": "vite",
+    "build:lib": "tsc && vite build && npm run types && copyfiles ./package.json dist && npm run removeFromBuild:lib",
     "build:app": "vite build --config vite.config.app.ts",
     "build": "npm run clean && npm run build:lib && npm run build:app",
     "test": "vitest",

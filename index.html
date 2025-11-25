@@ -172,6 +172,49 @@
                   class="accordion-button"
                   type="button"
                   data-bs-toggle="collapse"
+                  data-bs-target="#collapseSignHash"
+                  aria-expanded="true"
+                  aria-controls="collapseSignHash"
+                >
+                  Підпис хешу
+                </button>
+              </h2>
+
+              <div id="collapseSignHash" class="accordion-collapse collapse" data-bs-parent="#accordionList">
+                <div class="accordion-body">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Дані</span>
+                    <textarea
+                      rows="1"
+                      id="hashForSign"
+                      data-store-key="hashForSign"
+                      class="form-control"
+                      aria-label="Various data"
+                    ></textarea>
+                  </div>
+
+                  <p class="card-text mt-3">
+                    <span class="btn-group" role="group" aria-label="Navigation">
+                      <button type="button" class="btn btn-primary" id="buttonSignHash" disabled>Підписати</button>
+                      <button type="button" class="btn btn-primary" id="buttonDownloadSignedHash" disabled>
+                        Завантажити
+                      </button>
+                    </span>
+                  </p>
+
+                  <p class="card-text">
+                    <small class="text-muted">Приклад: vTJtIknyNKqXaoho1pZNKuZXOVv1SatuwAb1TSQU234=</small>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
                   data-bs-target="#collapseVerify"
                   aria-expanded="true"
                   aria-controls="collapseVerify"
@@ -381,6 +424,7 @@
           signUrl: qs("#buttonSignUrl"),
           addSignToData: qs("#buttonAddSignToData"),
           signData: qs("#buttonSignData"),
+          signHash: qs('#buttonSignHash'),
           verifyUrl: qs("#buttonVerifyUrl"),
           downloadSignedObjects: qs("#buttonDownloadSignedObjects"),
           downloadSignedData: qs("#buttonDownloadSignedData"),
@@ -389,10 +433,12 @@
           signFile: qs("#buttonSignFile"),
           addSignToFile: qs("#buttonAddSignToFile"),
           downloadSignedFile: qs("#buttonDownloadSignedFile"),
+          downloadSignedHash: qs('#buttonDownloadSignedHash'),
         },
         textarea: {
           url: qs("#inputUrl"),
           data: qs("#dataForSign"),
+          hash: qs('#hashForSign'),
         },
         input: {
           fileSign: qs("#fileSign"),
@@ -424,6 +470,7 @@
           defaultData: DEFAULT_OBJECT_URL,
         });
         element.textarea.data.value = getStoredData("dataForSign", { defaultData: "" });
+        element.textarea.hash.value = getStoredData('hashForSign', {defaultData: ''});
       }
 
       function createCertificateField(title, value) {
@@ -625,6 +672,23 @@
       /**
        * @return {Promise<void>}
        */
+      async function signHash() {
+          try {
+              const sign = await window.ProzorroEds.signHash(element.textarea.hash.value);
+
+              log(sign);
+              signed.hash = sign;
+              element.button.downloadSignedHash.disabled = false;
+          } catch (e) {
+              alert(e.message);
+              console.error(e);
+              console.log(`Code: ${e.code}. Message: ${e.message}`);
+          }
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
       async function downloadSignedObjects() {
         if (signed.objects === null) {
           alert("Sign is empty");
@@ -656,6 +720,18 @@
         }
 
         await downloadSign(signed.file, `signedFile`);
+      }
+
+      /**
+       * @return {Promise<void>}
+       */
+      async function downloadSignedHash() {
+          if (signed.hash === null) {
+              alert('Sign is empty');
+              return Promise.reject();
+          }
+
+          await downloadSign(signed.hash, `signedHash`);
       }
 
       /**
@@ -776,6 +852,7 @@
         element.button.signData.disabled = buttonState;
         element.button.signFile.disabled = buttonState;
         element.button.resetKey.disabled = buttonState;
+        element.button.signHash.disabled = buttonState;
 
         if (state === widgetState.end) {
           element.div.widgetCard.classList.add("widget-disabled");
@@ -840,11 +917,13 @@
       element.button.signVerify.addEventListener("click", event => btnActionWrapper(verifySign, event));
       element.button.signData.addEventListener("click", event => btnActionWrapper(signData, event));
       element.button.signFile.addEventListener("click", event => btnActionWrapper(signFile, event));
+      element.button.signHash.addEventListener('click', event => btnActionWrapper(signHash, event));
       element.button.addSignToData.addEventListener("click", event => btnActionWrapper(addSignToData, event));
       element.button.addSignToFile.addEventListener("click", event => btnActionWrapper(addSignToFile, event));
       element.button.downloadSignedObjects.addEventListener("click", event => btnActionWrapper(downloadSignedObjects, event));
       element.button.downloadSignedData.addEventListener("click", event => btnActionWrapper(downloadSignedData, event));
       element.button.downloadSignedFile.addEventListener("click", event => btnActionWrapper(downloadSignedFile, event));
+      element.button.downloadSignedHash.addEventListener('click', event => btnActionWrapper(downloadSignedHash, event));
 
       document.querySelectorAll("[data-store-key]").forEach(element => {
         element.addEventListener("keyup", event =>

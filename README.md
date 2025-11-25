@@ -105,12 +105,12 @@ const widget = await ProzorroEds.loadWidget(): Promise<WidgetUserServiceInterfac
 
 ### Підписання
 
-```ts
+```tsvp
 // 1) Підпис довільних даних
 await ProzorroEds.sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>
 
-// 2) Підпис об’єктів із ЦБД
-await ProzorroEds.signObjects(links: string[], options?: UserSignOptionsType): Promise<SignedObjectType[]>
+// 2) Підпис хешу
+await ProzorroEds.signHash(data: string, options?: UserSignOptionsType): Promise<Uint8Array | string>
 ```
 
 `UserSignOptionsType`:
@@ -119,9 +119,6 @@ await ProzorroEds.signObjects(links: string[], options?: UserSignOptionsType): P
 
 Повернення:
 - `sign(...) / signHash(...)` — масив байт або base64 (залежно від `asBase64String`);
-- `signObjects(...)` — масив `{ id, sign }`, де:
-    - `id: string` — ідентифікатор об’єкта з ЦБД,
-    - `sign: Uint8Array | string` — підпис.
 
 ### Перевірка
 
@@ -200,6 +197,8 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
   - Renamed `window.eds` to `window.ProzorroEds`;
   - Updated the validation messages;
   - Deleted the Sentry service;
+- **25.11.2025**
+  - Returned `signHash` method;
 
 ---
 

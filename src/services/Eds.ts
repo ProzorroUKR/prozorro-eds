@@ -24,7 +24,9 @@ export interface IEds {
   init(options?: EdsInitializationConfigType): Promise<void>;
   loadWidget(config: EdsWidgetConfigType): Promise<IWidgetUserService>;
   sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
+  signHash(data: string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
   verify(sign: string, encoding?: ENCODING): Promise<SignType>;
+  verifyObjects(links: string[]): Promise<VerifyObjectResponseType[] | Error>;
   formatObject(data: Record<any, any>): Record<any, any>;
 }
 
@@ -72,6 +74,13 @@ export class Eds implements IEds {
     Assert.isDefined(this.signService, errorMessages.libraryInit);
 
     return this.signService.sign(data, options);
+  }
+
+  async signHash(data: string, options?: UserSignOptionsType): Promise<Uint8Array | string> {
+    this.dataTypeValidator.validate(data, ValidationTypes.STRING);
+    Assert.isDefined(this.signService, errorMessages.libraryInit);
+
+    return this.signService.signHash(data, options);
   }
 
   async verify(sign: string, encoding?: ENCODING): Promise<SignType> {

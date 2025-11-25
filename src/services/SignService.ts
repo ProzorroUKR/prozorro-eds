@@ -12,6 +12,7 @@ import { SIGN_TYPE, SIGN_ALGO } from "@/vendors/eusign";
 
 export interface ISignService {
   sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
+  signHash(data: string, userOptions?: UserSignOptionsType): Promise<Uint8Array | string>;
   verify(sign: string, encoding?: ENCODING): Promise<SignType>;
 }
 
@@ -43,6 +44,29 @@ export class SignService implements ISignService {
         options.signAlgorithm,
         options.previousSign,
         options.signType
+      )) as Uint8Array | string;
+    } catch (e: any) {
+      throw new EdsError(e.message || e);
+    }
+  }
+
+  async signHash(data: string, userOptions: UserSignOptionsType = {}): Promise<Uint8Array | string> {
+    Assert.isDefined(this.store.widget.endUser, errorMessages.widgetInit);
+
+    try {
+      const options = {
+        asBase64String: Boolean(userOptions.asBase64String),
+        signAlgorithm: SIGN_ALGO.DSTU4145WithGOST34311,
+        previousSign: userOptions.previousSign || null,
+        signType: SIGN_TYPE.CAdES_X_Long,
+      };
+
+      return (await this.store.widget.endUser.SignHash(
+        data,
+        options.asBase64String,
+        options.signAlgorithm,
+        options.signType,
+        options.previousSign
       )) as Uint8Array | string;
     } catch (e: any) {
       throw new EdsError(e.message || e);
