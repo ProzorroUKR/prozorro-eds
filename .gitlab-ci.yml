@@ -2,4 +2,3 @@ include:
   - project: 'Web-Projects/client-services/prozorro-eds.ci'
     ref: master
     file: '.gitlab-ci-private.yml'
- 
