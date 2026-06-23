@@ -32,7 +32,7 @@ export class SignService implements ISignService {
       const options = {
         external: Boolean(userOptions.external),
         asBase64String: Boolean(userOptions.asBase64String),
-        signAlgorithm: SIGN_ALGO.DSTU4145WithGOST34311,
+        signAlgorithm: SIGN_ALGO.DSTU4145WithDSTU7564,
         previousSign: userOptions.previousSign || null,
         signType: SIGN_TYPE.CAdES_X_Long,
       };
@@ -56,7 +56,7 @@ export class SignService implements ISignService {
     try {
       const options = {
         asBase64String: Boolean(userOptions.asBase64String),
-        signAlgorithm: SIGN_ALGO.DSTU4145WithGOST34311,
+        signAlgorithm: SIGN_ALGO.DSTU4145WithDSTU7564,
         previousSign: userOptions.previousSign || null,
         signType: SIGN_TYPE.CAdES_X_Long,
       };

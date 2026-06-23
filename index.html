@@ -264,7 +264,7 @@
                 <div id="collapseWidget" class="accordion-collapse collapse show" data-bs-parent="#accordionWidget">
                   <div class="accordion-body">
                     <div id="widget-card">
-                      <div id="sign-widget-parent" style="width: 100%; height: 420px"></div>
+                      <div id="sign-widget-parent" style="width: 100%; height: 700px"></div>
                     </div>
 
                     <div class="card-footer text-body-secondary">
@@ -424,7 +424,7 @@
           signUrl: qs("#buttonSignUrl"),
           addSignToData: qs("#buttonAddSignToData"),
           signData: qs("#buttonSignData"),
-          signHash: qs('#buttonSignHash'),
+          signHash: qs("#buttonSignHash"),
           verifyUrl: qs("#buttonVerifyUrl"),
           downloadSignedObjects: qs("#buttonDownloadSignedObjects"),
           downloadSignedData: qs("#buttonDownloadSignedData"),
@@ -433,12 +433,12 @@
           signFile: qs("#buttonSignFile"),
           addSignToFile: qs("#buttonAddSignToFile"),
           downloadSignedFile: qs("#buttonDownloadSignedFile"),
-          downloadSignedHash: qs('#buttonDownloadSignedHash'),
+          downloadSignedHash: qs("#buttonDownloadSignedHash"),
         },
         textarea: {
           url: qs("#inputUrl"),
           data: qs("#dataForSign"),
-          hash: qs('#hashForSign'),
+          hash: qs("#hashForSign"),
         },
         input: {
           fileSign: qs("#fileSign"),
@@ -470,7 +470,7 @@
           defaultData: DEFAULT_OBJECT_URL,
         });
         element.textarea.data.value = getStoredData("dataForSign", { defaultData: "" });
-        element.textarea.hash.value = getStoredData('hashForSign', {defaultData: ''});
+        element.textarea.hash.value = getStoredData("hashForSign", { defaultData: "" });
       }
 
       function createCertificateField(title, value) {
@@ -673,17 +673,17 @@
        * @return {Promise<void>}
        */
       async function signHash() {
-          try {
-              const sign = await window.ProzorroEds.signHash(element.textarea.hash.value);
+        try {
+          const sign = await window.ProzorroEds.signHash(element.textarea.hash.value);
 
-              log(sign);
-              signed.hash = sign;
-              element.button.downloadSignedHash.disabled = false;
-          } catch (e) {
-              alert(e.message);
-              console.error(e);
-              console.log(`Code: ${e.code}. Message: ${e.message}`);
-          }
+          log(sign);
+          signed.hash = sign;
+          element.button.downloadSignedHash.disabled = false;
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
       }
 
       /**
@@ -726,12 +726,12 @@
        * @return {Promise<void>}
        */
       async function downloadSignedHash() {
-          if (signed.hash === null) {
-              alert('Sign is empty');
-              return Promise.reject();
-          }
+        if (signed.hash === null) {
+          alert("Sign is empty");
+          return Promise.reject();
+        }
 
-          await downloadSign(signed.hash, `signedHash`);
+        await downloadSign(signed.hash, `signedHash`);
       }
 
       /**
@@ -817,21 +817,21 @@
         const reader = new FileReader();
 
         reader.onloadend = async () => {
-            try {
-                const file = reader.result.replace(/^data:.+;base64,/, "");
-                const result = await window.ProzorroEds.verify(file, "UTF-8");
+          try {
+            const file = reader.result.replace(/^data:.+;base64,/, "");
+            const result = await window.ProzorroEds.verify(file, "UTF-8");
 
-                showSigners(result.signers);
+            showSigners(result.signers);
 
-                qs("#signDataCard").style.display = "block";
-                qs("#signDataPreview").innerText = result.data;
+            qs("#signDataCard").style.display = "block";
+            qs("#signDataPreview").innerText = result.data;
 
-                log(result);
-            } catch (e) {
-                alert(e.message);
-                console.error(e);
-                console.log(`Code: ${e.code}. Message: ${e.message}`);
-            }
+            log(result);
+          } catch (e) {
+            alert(e.message);
+            console.error(e);
+            console.log(`Code: ${e.code}. Message: ${e.message}`);
+          }
         };
 
         reader.readAsDataURL(element.input.fileSign.files[0]);
@@ -917,13 +917,15 @@
       element.button.signVerify.addEventListener("click", event => btnActionWrapper(verifySign, event));
       element.button.signData.addEventListener("click", event => btnActionWrapper(signData, event));
       element.button.signFile.addEventListener("click", event => btnActionWrapper(signFile, event));
-      element.button.signHash.addEventListener('click', event => btnActionWrapper(signHash, event));
+      element.button.signHash.addEventListener("click", event => btnActionWrapper(signHash, event));
       element.button.addSignToData.addEventListener("click", event => btnActionWrapper(addSignToData, event));
       element.button.addSignToFile.addEventListener("click", event => btnActionWrapper(addSignToFile, event));
-      element.button.downloadSignedObjects.addEventListener("click", event => btnActionWrapper(downloadSignedObjects, event));
+      element.button.downloadSignedObjects.addEventListener("click", event =>
+        btnActionWrapper(downloadSignedObjects, event)
+      );
       element.button.downloadSignedData.addEventListener("click", event => btnActionWrapper(downloadSignedData, event));
       element.button.downloadSignedFile.addEventListener("click", event => btnActionWrapper(downloadSignedFile, event));
-      element.button.downloadSignedHash.addEventListener('click', event => btnActionWrapper(downloadSignedHash, event));
+      element.button.downloadSignedHash.addEventListener("click", event => btnActionWrapper(downloadSignedHash, event));
 
       document.querySelectorAll("[data-store-key]").forEach(element => {
         element.addEventListener("keyup", event =>
@@ -935,17 +937,17 @@
 
       window.onload = async () => {
         await window.ProzorroEds.init({
-            debug: false,
-            environment: "development",
-            callbackAfterAuth: certificates => {
+          debug: false,
+          environment: "development",
+          callbackAfterAuth: certificates => {
             showCertificates(certificates);
             setWidgetState(widgetState.end);
           },
         });
 
         const widgetService = await window.ProzorroEds.loadWidget({
-            parentId: "sign-widget-parent",
-            frameId: "sign-widget",
+          parentId: "sign-widget-parent",
+          frameId: "sign-widget",
         });
 
         element.button.resetKey.addEventListener("click", () => resetKey(widgetService));

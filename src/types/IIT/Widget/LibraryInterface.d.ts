@@ -1,8 +1,14 @@
 import type { ConstantsInterface } from "@/types/IIT/Widget/ConstantsInterface";
 import type { CertificateType } from "@/types/IIT/Widget/CertificateType";
+import type { NamedDataType } from "@/types/IIT/Widget/NamedDataType";
 
 declare namespace EndUser {
   interface Instance extends ConstantsInterface {
+    /**
+     * Версія модуля взаємодії з iframe SignWidget
+     */
+    version: string;
+
     /**
      * Реєстрація обробника для отримання сповіщення про події від віджету підпису
      */
@@ -233,5 +239,117 @@ declare namespace EndUser {
        */
       senderCert: Uint8Array
     ): Promise<any>; // todo describe
+
+    /**
+     * Підпис PDF-файлу в форматі PAdES. Зчитаний ос. ключ повинен мати
+     * сертифікат призначений для підпису та тип відкритого ключа повинен
+     * відповідати алгоритму підпису.
+     *
+     * Повертається підпис
+     */
+    PAdESSignData(
+      /**
+       * pdf-документ для підпису у вигляді масиву байт чи
+       * у вигляді об'єкту NamedData
+       */
+      data: Uint8Array | NamedDataType | Array<Uint8Array | NamedDataType>,
+
+      /**
+       * Признак необхідності повертати
+       * підпис у вигляді строки BASE64. Опціональний параметр. За замовчанням - false.
+       */
+      asBase64String: boolean,
+
+      /**
+       * Алгоритм підпису. Можливі значення визначені в
+       * EndUser.SignAlgo. За замовчанням - EndUser.SignAlgo.DSTU4145WithGOST34311.
+       */
+      signAlgo: number,
+
+      /**
+       * Тип підпису. Можливі значення визначені в
+       * EndUser.PAdESSignLevel. За замовчанням - EndUser.PAdESSignLevel.PAdES_B_B.
+       */
+      signLevel?: number
+    ): Promise<Uint8Array | NamedDataType | string | Array<Uint8Array | NamedDataType | string>>;
+
+    /**
+     * Підпис даних в форматі XAdES. Зчитаний ос. ключ повинен мати
+     * сертифікат призначений для підпису та тип відкритого ключа повинен
+     * відповідати алгоритму підпису.
+     *
+     * Повертається підпис
+     */
+    XAdESSignData(
+      /**
+       * Тип підпису. Можливі значення визначені в EndUser.XAdESType
+       */
+      xadesType: number,
+
+      /**
+       * Масив даних у вигляді об'єкту NamedData для підпису
+       */
+      references: NamedDataType[],
+
+      /**
+       * Признак необхідності повертати
+       * підпис у вигляді строки BASE64. Опціональний параметр. За замовчанням - false.
+       */
+      asBase64String: boolean,
+
+      /**
+       * Алгоритм підпису. Можливі значення визначені в
+       * EndUser.SignAlgo. За замовчанням - EndUser.SignAlgo.DSTU4145WithGOST34311.
+       */
+      signAlgo: number,
+
+      /**
+       * Тип підпису. Можливі значення визначені в
+       * EndUser.XAdESSignLevel. За замовчанням - EndUser.XAdESSignLevel.XAdES_B_B.
+       */
+      signLevel?: number
+    ): Promise<NamedDataType>;
+
+    /**
+     * Підпис даних в форматі ASiC. Зчитаний ос. ключ повинен мати
+     * сертифікат призначений для підпису та тип відкритого ключа повинен
+     * відповідати алгоритму підпису.
+     *
+     * Повертається підпис
+     */
+    ASiCSignData(
+      /**
+       * Формат контейнеру. Можливі значення визначені в EndUser.ASiCType
+       */
+      asicType: number,
+
+      /**
+       * Тип підпису. Можливі значення визначені в EndUser.ASiCSignType
+       */
+      signType: number,
+
+      /**
+       * Масив даних у вигляді об'єкту NamedData для підпису
+       */
+      references: NamedDataType[],
+
+      /**
+       * Признак необхідності повертати
+       * підпис у вигляді строки BASE64. Опціональний параметр. За замовчанням - false.
+       */
+      asBase64String: boolean,
+
+      /**
+       * Алгоритм підпису. Можливі значення визначені в
+       * EndUser.SignAlgo. За замовчанням - EndUser.SignAlgo.DSTU4145WithGOST34311.
+       */
+      signAlgo: number,
+
+      /**
+       * Тип підпису. Можливі значення визначені в
+       * EndUser.SignType для CAdES або EndUser.XAdESSignLevel для XAdES.
+       */
+      signLevel?: number
+    ): Promise<NamedDataType>;
   }
 }

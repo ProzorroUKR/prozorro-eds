@@ -4,11 +4,19 @@ import type {FormType} from "@/types/IIT/Widget/config/FormType";
 import type {EventType} from "@/types/IIT/Widget/config/EventType";
 import type {SignAlgo} from "@/types/IIT/Widget/config/SignAlgo.ts";
 import type {SignType} from "@/types/IIT/Widget/config/SignType.ts";
+import type {PAdESSignLevel} from "@/types/IIT/Widget/config/PAdESSignLevel.ts";
+import type {XAdESType} from "@/types/IIT/Widget/config/XAdESType.ts";
+import type {XAdESSignLevel} from "@/types/IIT/Widget/config/XAdESSignLevel.ts";
+import type {ASiCType} from "@/types/IIT/Widget/config/ASiCType.ts";
+import type {ASiCSignType} from "@/types/IIT/Widget/config/ASiCSignType.ts";
 import type {KeyUsage} from "@/types/IIT/Widget/config/KeyUsage.ts";
 import type {PublicKeyType} from "@/types/IIT/Widget/config/PublicKeyType.ts";
+import type {CertHashType} from "@/types/IIT/Widget/config/CertHashType.ts";
 import type {CCSType} from "@/types/IIT/Widget/config/CCSType.ts";
 import type {RevocationReason} from "@/types/IIT/Widget/config/RevocationReason.ts";
 import type {FormParamsType} from "@/types/IIT/Widget/config/FormParamsType.ts";
+import type {NamedDataType} from "@/types/IIT/Widget/NamedDataType.ts";
+import type {ConfirmKSPOperationEventType} from "@/types/IIT/Widget/ConfirmKSPOperationEventType.ts";
 
 /**
  * EUSign - Electronic Signature Widget Connector
@@ -45,14 +53,43 @@ export const EVENT_TYPE: EventType = {
 export const SIGN_ALGO: SignAlgo = {
     DSTU4145WithGOST34311: 1,
     RSAWithSHA: 2,
-    ECDSAWithSHA: 3
+    ECDSAWithSHA: 3,
+    DSTU4145WithDSTU7564: 4
 };
 
 export const SIGN_TYPE: SignType = {
     CAdES_BES: 1,
     CAdES_T: 4,
     CAdES_C: 8,
-    CAdES_X_Long: 16
+    CAdES_X_Long: 16,
+    CAdES_X_Long_Trusted: 144
+};
+
+export const PADES_SIGN_LEVEL: PAdESSignLevel = {
+    PAdES_B_B: 1,
+    PAdES_B_T: 4
+};
+
+export const XADES_TYPE: XAdESType = {
+    Detached: 1,
+    Enveloped: 3
+};
+
+export const XADES_SIGN_LEVEL: XAdESSignLevel = {
+    XAdES_B_B: 1,
+    XAdES_B_T: 4,
+    XAdES_B_LT: 16,
+    XAdES_B_LTA: 32
+};
+
+export const ASIC_TYPE: ASiCType = {
+    S: 1,
+    E: 2
+};
+
+export const ASIC_SIGN_TYPE: ASiCSignType = {
+    CAdES: 1,
+    XAdES: 2
 };
 
 export const KEY_USAGE: KeyUsage = {
@@ -66,6 +103,18 @@ export const PUBLIC_KEY_TYPE: PublicKeyType = {
     ECDSA: 4
 };
 
+export const CERT_HASH_TYPE: CertHashType = {
+    GOST34311: 1,
+    SHA1: 2,
+    SHA224: 3,
+    SHA256: 4,
+    SHA384: 5,
+    SHA512: 6,
+    DSTU7564_256: 7,
+    DSTU7564_384: 8,
+    DSTU7564_512: 9
+};
+
 export const CCS_TYPE: CCSType = {
     Revoke: 1,
     Hold: 2
@@ -76,6 +125,36 @@ export const REVOCATION_REASON: RevocationReason = {
     KeyCompromise: 1,
     NewIssued: 2
 };
+
+/**
+ * Додатковий тип даних для передачі імені для даних
+ */
+export class NamedData implements NamedDataType {
+    constructor(
+        public name: string,
+        public val: Uint8Array | string
+    ) {}
+}
+
+/**
+ * Додаткові параметри форми відображення віджету
+ */
+export class FormParams implements FormParamsType {
+    ownCAOnly = false;
+    showPKInfo = true;
+    showSignTip = true;
+    language = 'ua';
+}
+
+/**
+ * Сповіщення про необхідність підтвердження операції з використання ос. ключа
+ * за допомогою сканування QR-коду в мобільному додатку сервісу підпису
+ */
+export class ConfirmKSPOperationEvent implements ConfirmKSPOperationEventType {
+    url = '';
+    qrImage = '';
+    mobileAppName = '';
+}
 
 // ============================================================================
 // Message Types
@@ -104,7 +183,7 @@ interface PromiseInfo {
 }
 
 export class EndUser implements Widget.Instance {
-    // private readonly version: string = "20200710";
+    readonly version: string = "20240701";
     private sender: string = "EndUserSignWidgetConnector";
     private reciever: string = "EndUserSignWidget";
     private parentId: string;
@@ -113,6 +192,7 @@ export class EndUser implements Widget.Instance {
     private formType: number;
     private formParams: FormParamsType | null;
     private iframe: HTMLIFrameElement | null = null;
+    private m_isIframeLoad: boolean = false;
     private m_promises: PromiseInfo[] = [];
     private m_listeners: { [key: number]: (event: any) => void } = [];
     // Deprecated constants (for backward compatibility)
@@ -124,8 +204,14 @@ export class EndUser implements Widget.Instance {
     readonly EventType: EventType = EVENT_TYPE;
     readonly SignAlgo: SignAlgo = SIGN_ALGO;
     readonly SignType: SignType = SIGN_TYPE;
+    readonly PAdESSignLevel: PAdESSignLevel = PADES_SIGN_LEVEL;
+    readonly XAdESType: XAdESType = XADES_TYPE;
+    readonly XAdESSignLevel: XAdESSignLevel = XADES_SIGN_LEVEL;
+    readonly ASiCType: ASiCType = ASIC_TYPE;
+    readonly ASiCSignType: ASiCSignType = ASIC_SIGN_TYPE;
     readonly KeyUsage: KeyUsage = KEY_USAGE;
     readonly PublicKeyType: PublicKeyType = PUBLIC_KEY_TYPE;
+    readonly CertHashType: CertHashType = CERT_HASH_TYPE;
     readonly CCSType: CCSType = CCS_TYPE;
     readonly RevocationReason: RevocationReason = REVOCATION_REASON;
 
@@ -220,7 +306,7 @@ export class EndUser implements Widget.Instance {
 
         let srcParams = '?address=' + (parsedOrigin?.origin || '');
         srcParams += '&formType=' + this.formType;
-        srcParams += '&debug=' + ((window as any).edsDebug || false);
+        srcParams += '&debug=' + false;
 
         if (this.formParams) {
             for (const paramName in this.formParams) {
@@ -252,6 +338,26 @@ export class EndUser implements Widget.Instance {
 
         (iframe as any).listener = listener;
         window.addEventListener("message", listener, false);
+
+        iframe.addEventListener("load", () => {
+            this.m_isIframeLoad = true;
+
+            if (s_debug) {
+                console.log("iframe loaded");
+            }
+
+            const promises = this.m_promises;
+            this.m_promises = [];
+
+            promises.forEach((promise) => {
+                this._postMessage(
+                    promise.msg.cmd,
+                    promise.msg.params,
+                    promise.resolve,
+                    promise.reject
+                );
+            });
+        });
 
         return iframe;
     }
@@ -302,19 +408,21 @@ export class EndUser implements Widget.Instance {
             });
         }
 
-        try {
-            const signWidget = document.getElementById(this.id) as HTMLIFrameElement;
-            if (signWidget && signWidget.contentWindow) {
-                signWidget.contentWindow.postMessage(msg, this.src);
-            }
-        } catch (e) {
-            if (s_debug) {
-                console.log("Main page post message error: " + e);
-            }
-        }
+        if (this.m_isIframeLoad) {
+            try {
+                const signWidget = document.getElementById(this.id) as HTMLIFrameElement;
+                if (signWidget && signWidget.contentWindow) {
+                    signWidget.contentWindow.postMessage(msg, this.src);
+                }
 
-        if (s_debug) {
-            console.log("Main page post message: ", msg);
+                if (s_debug) {
+                    console.log("Main page post message: ", msg);
+                }
+            } catch (e) {
+                if (s_debug) {
+                    console.log("Main page post message error: " + e);
+                }
+            }
         }
 
         return promise;
@@ -498,6 +606,63 @@ export class EndUser implements Widget.Instance {
     ): Promise<EnvelopedDataInfo> {
         const params = senderCert ? [envelopedData, senderCert] : [envelopedData];
         return this._postMessage('DevelopData', params) as Promise<EnvelopedDataInfo>;
+    }
+
+    /**
+     * Sign PDF file in PAdES format
+     * @param data - PDF document to sign (bytes or NamedData)
+     * @param asBase64String - Return signature as BASE64 string
+     * @param signAlgo - Signature algorithm (see SignAlgo constants)
+     * @param signLevel - Signature level (see PAdESSignLevel constants)
+     */
+    PAdESSignData(
+        data: Uint8Array | NamedData | Array<Uint8Array | NamedData>,
+        asBase64String: boolean = false,
+        signAlgo: number = SIGN_ALGO.DSTU4145WithGOST34311,
+        signLevel: number = PADES_SIGN_LEVEL.PAdES_B_B
+    ): Promise<Uint8Array | NamedData | string | Array<Uint8Array | NamedData | string>> {
+        const params = [data, asBase64String, signAlgo, signLevel];
+        return this._postMessage('PAdESSignData', params) as Promise<any>;
+    }
+
+    /**
+     * Sign data in XAdES format
+     * @param xadesType - Signature type (see XAdESType constants)
+     * @param references - Array of NamedData to sign
+     * @param asBase64String - Return signature as BASE64 string
+     * @param signAlgo - Signature algorithm (see SignAlgo constants)
+     * @param signLevel - Signature level (see XAdESSignLevel constants)
+     */
+    XAdESSignData(
+        xadesType: number,
+        references: NamedData[],
+        asBase64String: boolean = false,
+        signAlgo: number = SIGN_ALGO.DSTU4145WithGOST34311,
+        signLevel: number = XADES_SIGN_LEVEL.XAdES_B_B
+    ): Promise<NamedData> {
+        const params = [xadesType, references, asBase64String, signAlgo, signLevel];
+        return this._postMessage('XAdESSignData', params) as Promise<NamedData>;
+    }
+
+    /**
+     * Sign data in ASiC format
+     * @param asicType - Container format (see ASiCType constants)
+     * @param signType - Signature type (see ASiCSignType constants)
+     * @param references - Array of NamedData to sign
+     * @param asBase64String - Return signature as BASE64 string
+     * @param signAlgo - Signature algorithm (see SignAlgo constants)
+     * @param signLevel - Signature level (SignType for CAdES or XAdESSignLevel for XAdES)
+     */
+    ASiCSignData(
+        asicType: number,
+        signType: number,
+        references: NamedData[],
+        asBase64String: boolean = false,
+        signAlgo: number = SIGN_ALGO.DSTU4145WithGOST34311,
+        signLevel?: number
+    ): Promise<NamedData> {
+        const params = [asicType, signType, references, asBase64String, signAlgo, signLevel];
+        return this._postMessage('ASiCSignData', params) as Promise<NamedData>;
     }
 }
 
