@@ -16,4 +16,9 @@ export type SignAlgo = {
    * ECDSA з використанням алгоритму гешування SHA256
    */
   ECDSAWithSHA: number;
+
+  /**
+   * ДСТУ4145 з використанням алгоритму гешування ДСТУ7564
+   */
+  DSTU4145WithDSTU7564: number;
 };

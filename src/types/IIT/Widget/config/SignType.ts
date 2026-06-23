@@ -26,4 +26,10 @@ export type SignType = {
    * зі статусом сертифіката підписувача
    */
   CAdES_X_Long: number;
+
+  /**
+   * Підпис CAdES-X_Long, який додатково включає
+   * відповідь від OCSP сервера зі статусом сертифіката TSP-сервера
+   */
+  CAdES_X_Long_Trusted: number;
 };

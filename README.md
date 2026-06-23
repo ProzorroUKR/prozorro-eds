@@ -1,6 +1,7 @@
 # @prozorro/prozorro-eds
 
 #### Бібліотека електронного підпису для вебзастосунків Prozorro. Забезпечує:
+
 - ініціалізацію оточення підпису;
 - підпис та перевірку об’єктів із ЦБД;
 - підпис довільних даних;
@@ -38,7 +39,7 @@ import { ProzorroEds } from "@prozorro/prozorro-eds";
 await ProzorroEds.init({ debug: true });
 
 const signed = await ProzorroEds.sign("Any data", {
-  asBase64String: true,          // опційно: отримати base64
+  asBase64String: true, // опційно: отримати base64
 });
 
 console.log(signed);
@@ -69,8 +70,8 @@ const widget = await ProzorroEds.loadWidget();
 await widget.resetKey();
 ```
 
-> Для завантаження віджета домен вебзастосунку має бути доданий у список дозволених (інакше користувач побачить “Доступ заборонено”). 
-> В тестовому середовищі історично дозволені `localhost` та `sign-widget-test.eu.iit.com.ua`. 
+> Для завантаження віджета домен вебзастосунку має бути доданий у список дозволених (інакше користувач побачить “Доступ заборонено”).
+> В тестовому середовищі історично дозволені `localhost` та `sign-widget-test.eu.iit.com.ua`.
 > На сторінці має бути контейнер для iframe, напр.:  
 > `<div id="sign-widget-parent" style="width: 580px; height: 420px"></div>`.
 
@@ -89,9 +90,9 @@ await ProzorroEds.init(options?: EdsInitializationConfigType): Promise<void>
 
 - Має бути викликаний **перед** будь-якими іншими операціями (підпис/перевірка/віджет).  
   Опції:
-    - `debug?: boolean` — службові логи в консолі;
-    - `callbackAfterAuth?: (certs: CertificateType[]) => void` — викликається після зчитування ключа користувачем;
-    - `ignoreFields?: string[]` — ключі полів, які ігноруються при порівнянні об’єктів (під час валідації підпису з ЦБД).
+  - `debug?: boolean` — службові логи в консолі;
+  - `callbackAfterAuth?: (certs: CertificateType[]) => void` — викликається після зчитування ключа користувачем;
+  - `ignoreFields?: string[]` — ключі полів, які ігноруються при порівнянні об’єктів (під час валідації підпису з ЦБД).
 
 ### Віджет підпису
 
@@ -101,7 +102,7 @@ const widget = await ProzorroEds.loadWidget(): Promise<WidgetUserServiceInterfac
 
 - Завантажує iframe-віджет підпису (потрібний для накладання підпису).
 - `WidgetUserServiceInterface`:
-    - `resetKey(): Promise<void>` — скинути зчитаний ключ.
+  - `resetKey(): Promise<void>` — скинути зчитаний ключ.
 
 ### Підписання
 
@@ -114,10 +115,12 @@ await ProzorroEds.signHash(data: string, options?: UserSignOptionsType): Promise
 ```
 
 `UserSignOptionsType`:
+
 - `asBase64String?: boolean` — повернути підпис як base64-рядок (інакше `Uint8Array`);
 - `previousSign?: Uint8Array | string | null` — додати підпис до наданого (можливо лише якщо попередній підпис **не** містить цього підписувача).
 
 Повернення:
+
 - `sign(...) / signHash(...)` — масив байт або base64 (залежно від `asBase64String`);
 
 ### Перевірка
@@ -131,6 +134,7 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
 ```
 
 Повернення:
+
 - `verify(...)` — структура підпису `SignType` з масивом підписантів;
 - `verifyObjects(...)` — дані про відмінності між підписом і фактичним JSON з ЦБД (через `jsondiffpatch`), список підписантів, та нормалізовані дані з підпису.
 
@@ -139,41 +143,51 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
 ## Типи
 
 ### `EdsInitializationConfigType`
+
 - `ignoreFields?: string[]`
 - `callbackAfterAuth?: (CertificateType[]) => void`
 - `debug?: boolean`
 - `environment?: "production" | "development"`
+
 ### `EdsWidgetConfigType`
+
 - `parentId: string;` - Ідентифікатор братківського елементу для відображення iframe, який завантажує сторінку SignWidget
 - `frameId: string;` - Ідентифікатор iframe, який завантажує сторінку SignWidget
 
 ### `UserSignOptionsType`
+
 - `asBase64String?: boolean`
 - `previousSign?: Uint8Array | string | null`
 
 ### `SignType`
+
 - `data: string`
 - `signers: SignerType[]`
 
 ### `SignerType` (витяг)
+
 - `issuer`, `issuerCN`, `serial`, `subject`, `subjectCN`, `subjectOrg`, `subjectOrgUnit`, `subjectTitle`, `subjectState`, `subjectLocality`, `subjectFullName`, `subjectAddress`, `subjectPhone`, `subjectEMail`, `subjectDNS`, `subjectEDRPOUCode`, `subjectDRFOCode`
 - `isFilled`, `isTimeAvail`, `isTimeStamp`
 - `time: TimeType`
 
 ### `TimeType`
+
 - `year`, `month`, `dayOfWeek`, `day`, `hour`, `minute`, `second`, `milliseconds`
 
 ### `SignedObjectType`
+
 - `id: string` — ідентифікатор об’єкта з ЦБД
 - `sign: Uint8Array | string` — підпис (тип залежить від опцій підпису)
 
 ### `VerifyObjectResponseType`
+
 - `difference?: DeltaType` — результат порівняння підпису з JSON-даними ЦБД
 - `signers: SignerType[]`
 - `data.fromSign: JSON` — дані з підпису
 - `data.fromDb: JSON` — дані з ЦБД
 
 ### `CertificateType`
+
 - `data: Uint8Array`
 - `infoEx: InfoExType` — розширена інформація сертифіката (OCSP/TSP/модуль RSA, строки дії, серійний номер, ключові призначення тощо).
 
@@ -185,11 +199,11 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
 
 ---
 
-## Release notes 
+## Release notes
 
-- **21.10.2025** 
+- **21.10.2025**
   - Refactored eusign.js dependency;
-- **23.10.2025** 
+- **23.10.2025**
   - Removed environment dependency from `-beta` library tag;
   - Renamed the `UserOptionsType` type to `EdsInitializationConfigType`;
   - Extended the `EdsInitializationConfigType` type, added `environment` field;
@@ -199,6 +213,8 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
   - Deleted the Sentry service;
 - **25.11.2025**
   - Returned `signHash` method;
+- **22.06.2026**
+  - Updated eusign.js 
 
 ---
 
