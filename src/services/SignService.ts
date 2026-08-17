@@ -3,23 +3,24 @@ import { ENCODING } from "@/constants/encoding";
 import { EdsError } from "@/services/Error/EdsError";
 import type { SignType } from "@/types/sign/SignType";
 import type { UserSignOptionsType } from "@/types/UserSignOptionsType";
+import type { VerifyOptionsType } from "@/types/sign/VerifyOptionsType";
 import { Assert } from "@/utils/Assert";
 import { Base64 } from "@/utils/Base64";
 import type { IStore } from "@/store";
-import { ApiSignAdapter } from "@/services/ApiSign/ApiSignAdapter";
+import { ApiSignAdapter, type IApiSignAdapter } from "@/services/ApiSign/ApiSignAdapter";
 import { ApiSignService, type IApiSignService } from "@/services/ApiSign/ApiSignService";
 import { SIGN_TYPE, SIGN_ALGO } from "@/vendors/eusign";
 
 export interface ISignService {
   sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
   signHash(data: string, userOptions?: UserSignOptionsType): Promise<Uint8Array | string>;
-  verify(sign: string, encoding?: ENCODING): Promise<SignType>;
+  verify(params: string | VerifyOptionsType, encoding?: ENCODING): Promise<SignType>;
 }
 
 export class SignService implements ISignService {
   private readonly base64 = new Base64();
   private readonly apiSignService: IApiSignService;
-  private readonly apiSignAdapter = new ApiSignAdapter();
+  private readonly apiSignAdapter: IApiSignAdapter = new ApiSignAdapter();
 
   constructor(private readonly store: IStore) {
     this.apiSignService = new ApiSignService(store.userOptions.envVars);
@@ -73,8 +74,10 @@ export class SignService implements ISignService {
     }
   }
 
-  async verify(sign: string, encoding?: ENCODING): Promise<SignType> {
-    const decryptResponse = await this.apiSignService.decrypt(sign);
+  async verify(params: string | VerifyOptionsType, encoding?: ENCODING): Promise<SignType> {
+    const options = this.normalizeOptions(params);
+    const request = this.apiSignAdapter.prepareVerifyRequest(options);
+    const decryptResponse = await this.apiSignService.decrypt(request);
     const { data, signers } = this.apiSignAdapter.prepareDecryptResponse(decryptResponse);
 
     if (encoding === undefined) {
@@ -85,5 +88,9 @@ export class SignService implements ISignService {
       data: this.base64.decode(data, encoding),
       signers,
     };
+  }
+
+  private normalizeOptions(params: string | VerifyOptionsType): VerifyOptionsType {
+    return typeof params === "string" ? { sign: params } : params;
   }
 }

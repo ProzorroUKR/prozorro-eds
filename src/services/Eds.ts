@@ -14,7 +14,9 @@ import { type IObjectHandler, ObjectHandler } from "./ObjectHandler";
 import { ValidationTypes } from "./DataTypeValidator/ValidationTypes";
 import type { EdsWidgetConfigType } from "@/types/EdsWidgetConfigType";
 import type { UserSignOptionsType } from "@/types/UserSignOptionsType";
+import type { VerifyOptionsType } from "@/types/sign/VerifyOptionsType";
 import { DataTypeValidator } from "./DataTypeValidator/DataTypeValidator";
+import { VerifyParamsValidator } from "./DataTypeValidator/VerifyParamsValidator";
 import type { VerifyObjectResponseType } from "@/types/VerifyObjectResponseType";
 import type { EdsInitializationConfigType } from "@/types/EdsInitializationConfigType";
 import { type IWidgetUserService, WidgetUserService } from "./Widget/WidgetUserService";
@@ -25,7 +27,7 @@ export interface IEds {
   loadWidget(config: EdsWidgetConfigType): Promise<IWidgetUserService>;
   sign(data: Uint8Array | string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
   signHash(data: string, options?: UserSignOptionsType): Promise<Uint8Array | string>;
-  verify(sign: string, encoding?: ENCODING): Promise<SignType>;
+  verify(params: string | VerifyOptionsType, encoding?: ENCODING): Promise<SignType>;
   verifyObjects(links: string[]): Promise<VerifyObjectResponseType[] | Error>;
   formatObject(data: Record<any, any>): Record<any, any>;
 }
@@ -34,6 +36,7 @@ export class Eds implements IEds {
   readonly version = packageJson.version;
   private readonly store = new Store();
   private readonly dataTypeValidator = new DataTypeValidator();
+  private readonly verifyParamsValidator = new VerifyParamsValidator();
 
   private logger?: ILogger;
   private signService?: ISignService;
@@ -83,11 +86,12 @@ export class Eds implements IEds {
     return this.signService.signHash(data, options);
   }
 
-  async verify(sign: string, encoding?: ENCODING): Promise<SignType> {
-    this.dataTypeValidator.validate(sign, ValidationTypes.STRING);
+  async verify(params: string | VerifyOptionsType, encoding?: ENCODING): Promise<SignType> {
+    this.dataTypeValidator.validate(params, [ValidationTypes.STRING, ValidationTypes.OBJECT]);
+    this.verifyParamsValidator.validate(params);
     Assert.isDefined(this.signService, errorMessages.libraryInit);
 
-    return this.signService.verify(sign, encoding);
+    return this.signService.verify(params, encoding);
   }
 
   async verifyObjects(links: string[]): Promise<VerifyObjectResponseType[] | Error> {

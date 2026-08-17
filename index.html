@@ -241,6 +241,61 @@
                 </div>
               </div>
             </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseVerifyDetached"
+                  aria-expanded="true"
+                  aria-controls="collapseVerifyDetached"
+                >
+                  Перевірка відокремленого підпису / за посиланнями
+                </button>
+              </h2>
+
+              <div id="collapseVerifyDetached" class="accordion-collapse collapse" data-bs-parent="#accordionList">
+                <div class="accordion-body">
+                  <label class="form-label" for="fileVerifyData">Підписаний файл — <samp>data</samp></label>
+                  <div class="input-group mb-3">
+                    <input class="form-control" type="file" id="fileVerifyData" />
+                  </div>
+
+                  <label class="form-label" for="fileVerifySign">Файл підпису — <samp>sign</samp></label>
+                  <div class="input-group mb-3">
+                    <input class="form-control" type="file" id="fileVerifySign" />
+                  </div>
+
+                  <label class="form-label" for="inputDataUrl"
+                    >Посилання на підписані дані — <samp>dataUrl</samp></label
+                  >
+                  <div class="input-group mb-3">
+                    <textarea class="form-control" id="inputDataUrl" data-store-key="dataUrl" rows="1"></textarea>
+                  </div>
+
+                  <label class="form-label" for="inputSignUrl">Посилання на підпис — <samp>signUrl</samp></label>
+                  <div class="input-group mb-3">
+                    <textarea class="form-control" id="inputSignUrl" data-store-key="signUrl" rows="1"></textarea>
+                  </div>
+
+                  <p class="card-text mt-3">
+                    <span class="btn-group" role="group" aria-label="Navigation">
+                      <button type="button" class="btn btn-primary" id="buttonVerifyDetached">Перевірити</button>
+                    </span>
+                  </p>
+
+                  <p class="card-text">
+                    <small class="text-muted">
+                      Одне з <samp>data</samp> / <samp>dataUrl</samp> та одне з <samp>sign</samp> /
+                      <samp>signUrl</samp>. Посилання мають бути абсолютними (<samp>http(s)://</samp>) — їх завантажує
+                      сервер розшифровки.
+                    </small>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -426,6 +481,7 @@
           signData: qs("#buttonSignData"),
           signHash: qs("#buttonSignHash"),
           verifyUrl: qs("#buttonVerifyUrl"),
+          verifyDetached: qs("#buttonVerifyDetached"),
           downloadSignedObjects: qs("#buttonDownloadSignedObjects"),
           downloadSignedData: qs("#buttonDownloadSignedData"),
           signVerify: qs("#buttonSignVerify"),
@@ -439,10 +495,14 @@
           url: qs("#inputUrl"),
           data: qs("#dataForSign"),
           hash: qs("#hashForSign"),
+          dataUrl: qs("#inputDataUrl"),
+          signUrl: qs("#inputSignUrl"),
         },
         input: {
           fileSign: qs("#fileSign"),
           fileForSign: qs("#fileForSign"),
+          fileVerifyData: qs("#fileVerifyData"),
+          fileVerifySign: qs("#fileVerifySign"),
         },
       };
 
@@ -471,6 +531,8 @@
         });
         element.textarea.data.value = getStoredData("dataForSign", { defaultData: "" });
         element.textarea.hash.value = getStoredData("hashForSign", { defaultData: "" });
+        element.textarea.dataUrl.value = getStoredData("dataUrl", { defaultData: "" });
+        element.textarea.signUrl.value = getStoredData("signUrl", { defaultData: "" });
       }
 
       function createCertificateField(title, value) {
@@ -837,6 +899,65 @@
         reader.readAsDataURL(element.input.fileSign.files[0]);
       }
 
+      /**
+       * @param {File} file
+       * @return {Promise<string>}
+       */
+      function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onloadend = () => resolve(reader.result.replace(/^data:.+;base64,/, ""));
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      /**
+       * Перевірка відокремленого підпису та/або перевірка за посиланнями.
+       * Одне з data / dataUrl та одне з sign / signUrl.
+       *
+       * @return {Promise<void>}
+       */
+      async function verifyDetached() {
+        try {
+          const options = {};
+          const dataFile = element.input.fileVerifyData.files[0];
+          const signFile = element.input.fileVerifySign.files[0];
+          const dataUrl = element.textarea.dataUrl.value.trim();
+          const signUrl = element.textarea.signUrl.value.trim();
+
+          if (dataFile !== undefined) {
+            options.data = await readFileAsBase64(dataFile);
+          }
+
+          if (signFile !== undefined) {
+            options.sign = await readFileAsBase64(signFile);
+          }
+
+          if (dataUrl !== "") {
+            options.dataUrl = dataUrl;
+          }
+
+          if (signUrl !== "") {
+            options.signUrl = signUrl;
+          }
+
+          const result = await window.ProzorroEds.verify(options);
+
+          showSigners(result.signers);
+
+          qs("#signDataCard").style.display = "block";
+          qs("#signDataPreview").innerText = result.data;
+
+          log(result);
+        } catch (e) {
+          alert(e.message);
+          console.error(e);
+          console.log(`Code: ${e.code}. Message: ${e.message}`);
+        }
+      }
+
       const widgetState = {
         start: "start",
         end: "end",
@@ -915,6 +1036,7 @@
       element.button.signUrl.addEventListener("click", event => btnActionWrapper(signObject, event));
       element.button.verifyUrl.addEventListener("click", event => btnActionWrapper(verifyLinks, event));
       element.button.signVerify.addEventListener("click", event => btnActionWrapper(verifySign, event));
+      element.button.verifyDetached.addEventListener("click", event => btnActionWrapper(verifyDetached, event));
       element.button.signData.addEventListener("click", event => btnActionWrapper(signData, event));
       element.button.signFile.addEventListener("click", event => btnActionWrapper(signFile, event));
       element.button.signHash.addEventListener("click", event => btnActionWrapper(signHash, event));

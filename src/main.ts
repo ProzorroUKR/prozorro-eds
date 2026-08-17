@@ -11,6 +11,7 @@ export * from "@/types/VerifyObjectResponseType";
 export * from "@/types/sign/SignerType";
 export * from "@/types/sign/SignType";
 export * from "@/types/sign/TimeType";
+export * from "@/types/sign/VerifyOptionsType";
 
 const ProzorroEds = new Eds();
 

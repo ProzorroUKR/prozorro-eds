@@ -4,32 +4,38 @@ import { errorMessages } from "@/config/errorMessages";
 import { STRING } from "@/constants/string";
 import { EdsError } from "@/services/Error/EdsError";
 import type { ApiSignDecryptResponseType } from "@/types/http/ApiSignDecryptResponseType";
+import type { ApiSignVerifyRequestType } from "@/types/http/ApiSignVerifyRequestType";
 import { API_SIGN_METHODS } from "@/constants/apiSignMethods";
 import type { EnvironmentType } from "@/types/EnvironmentType.ts";
 import { HTTP } from "@/constants/http.ts";
 
 export interface IApiSignService {
-  decrypt(sign: string): Promise<ApiSignDecryptResponseType>;
+  decrypt(request: ApiSignVerifyRequestType): Promise<ApiSignDecryptResponseType>;
 }
 
 export class ApiSignService implements IApiSignService {
   constructor(private readonly envVars: EnvironmentType) {}
 
-  async decrypt(sign: string): Promise<ApiSignDecryptResponseType> {
-    const apiUrl = `${this.envVars.apiSign.url}${API_SIGN_METHODS.DECRYPT}`;
+  async decrypt(request: ApiSignVerifyRequestType): Promise<ApiSignDecryptResponseType> {
+    return this.post(this.resolveMethod(request), request);
+  }
+
+  private resolveMethod(request: ApiSignVerifyRequestType): string {
+    const hasData = request.data || request.data_url;
+    return hasData ? API_SIGN_METHODS.VERIFY_DATA_BODY : API_SIGN_METHODS.DECRYPT;
+  }
+
+  private async post(method: string, body: ApiSignVerifyRequestType): Promise<ApiSignDecryptResponseType> {
+    const apiUrl = `${this.envVars.apiSign.url}${method}`;
     let response: AxiosResponse<ApiSignDecryptResponseType>;
 
     try {
-      response = await axios.post(
-        apiUrl,
-        { sign },
-        {
-          auth: {
-            username: this.envVars.apiSign.login,
-            password: this.envVars.apiSign.pass,
-          },
-        }
-      );
+      response = await axios.post(apiUrl, body, {
+        auth: {
+          username: this.envVars.apiSign.login,
+          password: this.envVars.apiSign.pass,
+        },
+      });
     } catch (e: any) {
       const error: AxiosError<ApiSignDecryptResponseType> = e;
       const errors = (error?.response?.data?.errors || []).map(error => `Decrypt error: ${error.description}`);

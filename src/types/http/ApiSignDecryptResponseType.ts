@@ -5,19 +5,11 @@ export type ApiSignDecryptResponseType = {
   status?: "error";
   errors?: ApiSignDecryptErrorType[];
   data?: {
-    content: string;
-    signers: ApiSignSignerType[];
-
-    /**
-     * data.content decoded by UTF-16
-     * @deprecated
-     */
-    info: string;
-
-    /**
-     * First element from data.signers
-     * @deprecated
-     */
-    signer: ApiSignSignerType;
+    /** Відсутнє у відповіді verify_data — дані передає сам клієнт */
+    content?: string;
+    /** Може бути відсутнім — тоді підписант приходить лише у полі signer */
+    signers?: ApiSignSignerType[];
+    info?: string;
+    signer?: ApiSignSignerType;
   };
 };

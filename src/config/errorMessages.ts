@@ -62,4 +62,20 @@ export const errorMessages: Record<string, ErrorMessageType> = {
     message: "Виникла помилка під час дешифрування даних. Невірний формат вхідних даних або не валідний підпис",
     code: "015",
   },
+  verifySignRequired: {
+    message: "Необхідно вказати підпис: одне з полів sign або signUrl",
+    code: "016",
+  },
+  verifySignConflict: {
+    message: "Вкажіть лише одне з полів sign або signUrl",
+    code: "017",
+  },
+  verifyDataConflict: {
+    message: "Вкажіть лише одне з полів data або dataUrl",
+    code: "018",
+  },
+  verifyInvalidUrl: {
+    message: "Не вірний формат посилання. Очікується абсолютне посилання http(s)://",
+    code: "019",
+  },
 } as const;

@@ -126,16 +126,32 @@ await ProzorroEds.signHash(data: string, options?: UserSignOptionsType): Promise
 ### Перевірка
 
 ```ts
-// 1) Перевірка довільного підпису (base64)
-await ProzorroEds.verify(sign: string): Promise<SignType>
+// 1) Перевірка довільного підпису із вбудованими даними (base64)
+await ProzorroEds.verify(sign: string, encoding?: ENCODING): Promise<SignType>
 
-// 2) Перевірка об’єктів із ЦБД
+// 2) Перевірка відокремленого підпису разом із підписаними даними
+await ProzorroEds.verify({ data, sign }, encoding?: ENCODING): Promise<SignType>
+
+// 3) Дані та/або підпис за посиланням (завантажує сервер розшифровки)
+await ProzorroEds.verify({ dataUrl, signUrl }): Promise<SignType>
+
+// 4) Підпис із вбудованими даними за посиланням
+await ProzorroEds.verify({ signUrl }): Promise<SignType>
+
+// 5) Перевірка об’єктів із ЦБД
 await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseType[]>
 ```
 
+Правило комбінування полів `VerifyOptionsType`:
+
+- **одне з** `data` / `dataUrl` (обидва разом — помилка `018`);
+- **одне з** `sign` / `signUrl` (обидва разом — помилка `017`, жодного — помилка `016`);
+- наявність `data` або `dataUrl` перемикає запит на метод `verify_data`, інакше — `verify_data_internal`;
+- посилання мають бути абсолютними (`http(s)://`) — їх завантажує сервер розшифровки, а не браузер (інакше помилка `019`).
+
 Повернення:
 
-- `verify(...)` — структура підпису `SignType` з масивом підписантів;
+- `verify(...)` — структура підпису `SignType` з масивом підписантів. Для відокремленого підпису поле `data` може бути порожнім — підписані дані передає сам клієнт;
 - `verifyObjects(...)` — дані про відмінності між підписом і фактичним JSON з ЦБД (через `jsondiffpatch`), список підписантів, та нормалізовані дані з підпису.
 
 ---
@@ -163,6 +179,15 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
 
 - `data: string`
 - `signers: SignerType[]`
+
+### `VerifyOptionsType`
+
+- `data?: string` — base64 підписаних даних (для відокремленого підпису)
+- `dataUrl?: string` — посилання на підписані дані (завантажує сервер розшифровки)
+- `sign?: string` — base64 підпису
+- `signUrl?: string` — посилання на файл підпису (завантажує сервер розшифровки)
+
+Кодування передається другим аргументом `verify(params, encoding?)`.
 
 ### `SignerType` (витяг)
 
@@ -214,7 +239,10 @@ await ProzorroEds.verifyObjects(links: string[]): Promise<VerifyObjectResponseTy
 - **25.11.2025**
   - Returned `signHash` method;
 - **22.06.2026**
-  - Updated eusign.js 
+  - Updated eusign.js
+- **17.08.2026**
+  - Extended `verify` — added detached verification (`data` + `sign`) and verification by links (`dataUrl` / `signUrl`);
+  - Added the `VerifyOptionsType` type;
 
 ---
 

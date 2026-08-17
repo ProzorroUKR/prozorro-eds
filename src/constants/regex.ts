@@ -8,4 +8,5 @@ export const REGEX = {
   NUMBER: {
     EIGHT_SYMBOLS: /^\d{8}$/,
   },
+  URL: /^https?:\/\/\S+$/i,
 } as const;
